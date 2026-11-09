@@ -206,7 +206,7 @@ export const SignatureEvidenceGraph: React.FC<{
   };
 
   return (
-    <div className="relative w-full h-[360px] md:h-[420px] rounded-2xl bg-[#080C15] border border-white/[0.08] overflow-hidden shadow-2xl">
+    <div className="relative w-full h-[360px] md:h-[420px] rounded-2xl bg-slate-900 dark:bg-[#111318] border border-slate-200 dark:border-[#303743] overflow-hidden shadow-sm">
       {/* View Mode Toggle: 3D vs 2D Schematic */}
       <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
         <button
@@ -214,7 +214,7 @@ export const SignatureEvidenceGraph: React.FC<{
             setUse3D(!use3D);
             cyberAudio.playClick(600, 0.04);
           }}
-          className="px-2.5 py-1 rounded-md bg-[#101726]/90 border border-white/10 hover:border-cyan-400/40 text-[10px] font-mono text-slate-300 hover:text-white transition-colors cursor-pointer"
+          className="px-2.5 py-1 rounded-md bg-white/10 dark:bg-[#1D232C]/90 border border-white/20 dark:border-[#303743] hover:border-cyan-400 text-[10px] font-mono text-slate-200 hover:text-white transition-colors cursor-pointer backdrop-blur-sm"
         >
           MODE: {use3D ? '3D MATRIX' : '2D SCHEMATIC'}
         </button>
@@ -223,7 +223,7 @@ export const SignatureEvidenceGraph: React.FC<{
       {/* Top Left Telemetry HUD */}
       <div className="absolute top-4 left-4 z-20 pointer-events-none select-none">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#00F2FE] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse" />
           <span className="font-mono text-[10px] tracking-wider text-cyan-300 uppercase font-semibold">
             EVIDENCE PROVENANCE TOPOLOGY
           </span>
@@ -247,7 +247,7 @@ export const SignatureEvidenceGraph: React.FC<{
         </Canvas>
       ) : (
         /* 2D High-Density Accessible Fallback */
-        <div className="w-full h-full flex flex-col justify-center items-center p-6 space-y-4">
+        <div className="w-full h-full flex flex-col justify-center items-center p-6 space-y-4 bg-slate-950/80 dark:bg-[#111318]">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-2xl">
             {NODES.map((n) => (
               <div
@@ -255,8 +255,8 @@ export const SignatureEvidenceGraph: React.FC<{
                 onClick={() => handleSelect(n)}
                 className={`p-3 rounded-lg border font-mono text-xs cursor-pointer transition-colors ${
                   selectedNode?.id === n.id
-                    ? 'bg-[#00F2FE]/10 border-cyan-400 text-white shadow-[0_0_12px_rgba(0,242,254,0.15)]'
-                    : 'bg-[#0C111C] border-white/[0.08] text-slate-300 hover:border-white/20'
+                    ? 'bg-[#416F9E]/20 dark:bg-[#648DBB]/20 border-[#38BDF8] text-white shadow-sm'
+                    : 'bg-white/5 dark:bg-[#171B22] border-white/10 dark:border-[#303743] text-slate-300 hover:border-white/30'
                 }`}
               >
                 <div className="text-[10px] text-slate-400">{n.category}</div>
@@ -269,7 +269,7 @@ export const SignatureEvidenceGraph: React.FC<{
 
       {/* Bottom Selected Node Inspector Card */}
       {selectedNode && (
-        <div className="absolute bottom-4 inset-x-4 z-20 p-3 rounded-xl bg-[#090D17]/95 backdrop-blur-md border border-white/[0.1] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-xs shadow-2xl">
+        <div className="absolute bottom-4 inset-x-4 z-20 p-3 rounded-xl bg-slate-900/95 dark:bg-[#1D232C]/95 backdrop-blur-md border border-white/10 dark:border-[#303743] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-xs shadow-xl">
           <div className="flex items-center gap-3">
             <span
               className="w-2.5 h-2.5 rounded-full shrink-0"

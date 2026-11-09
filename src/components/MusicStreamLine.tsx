@@ -4,11 +4,11 @@ import { useRef, useState } from "react";
 import { cyberAudio } from "@/lib/audio";
 import { Volume2, VolumeX } from "lucide-react";
 
-interface MusicStreamLineProps {
+export interface MusicStreamLineProps {
   color?: string;
 }
 
-export const MusicStreamLine = ({ color = "text-[#00F2FE]" }: MusicStreamLineProps) => {
+export const MusicStreamLine = ({ color }: MusicStreamLineProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const barsRef = useRef<HTMLDivElement>(null);
 
@@ -55,28 +55,28 @@ export const MusicStreamLine = ({ color = "text-[#00F2FE]" }: MusicStreamLinePro
   return (
     <button
       onClick={toggleSound}
-      className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#060910] border border-white/[0.08] hover:border-cyan-400/40 transition-colors group cursor-pointer"
+      className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-[#303743] hover:border-[#416F9E] dark:hover:border-[#648DBB] transition-colors group cursor-pointer shadow-sm"
       title={isPlaying ? "Mute Cyber Telemetry" : "Activate Cyber Telemetry Sound"}
     >
       {/* Animated Sound Equalizer Bars */}
       <div
         ref={barsRef}
-        className="flex items-center gap-[3px] h-3.5 w-6 justify-center"
+        className="flex items-center gap-[2.5px] h-3.5 w-5 justify-center"
       >
-        <span className="w-[2.5px] h-full bg-[#00F2FE] rounded-full origin-bottom" />
-        <span className="w-[2.5px] h-full bg-emerald-400 rounded-full origin-bottom" />
-        <span className="w-[2.5px] h-full bg-[#00F2FE] rounded-full origin-bottom" />
-        <span className="w-[2.5px] h-full bg-cyan-200 rounded-full origin-bottom" />
+        <span className="w-[2.5px] h-full bg-[#416F9E] dark:bg-[#648DBB] rounded-full origin-bottom" />
+        <span className="w-[2.5px] h-full bg-[#337D5C] dark:bg-[#4D9B78] rounded-full origin-bottom" />
+        <span className="w-[2.5px] h-full bg-[#416F9E] dark:bg-[#648DBB] rounded-full origin-bottom" />
+        <span className="w-[2.5px] h-full bg-sky-400 rounded-full origin-bottom" />
       </div>
 
-      <span className={`text-[11px] font-mono tracking-wider ${color}`}>
-        {isPlaying ? "AUDIO: SYNTH_ACTIVE" : "AUDIO: MUTED"}
+      <span className="text-[10px] font-mono tracking-wider text-slate-600 dark:text-slate-300">
+        {isPlaying ? "SYNTH" : "MUTED"}
       </span>
 
       {isPlaying ? (
-        <Volume2 className="w-3.5 h-3.5 text-[#00F2FE] animate-pulse" />
+        <Volume2 className="w-3.5 h-3.5 text-[#416F9E] dark:text-[#648DBB] animate-pulse" />
       ) : (
-        <VolumeX className="w-3.5 h-3.5 text-white/40 group-hover:text-white" />
+        <VolumeX className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200" />
       )}
     </button>
   );

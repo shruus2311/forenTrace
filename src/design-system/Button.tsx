@@ -32,17 +32,17 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variants = {
     primary:
-      'bg-[#00F2FE] hover:bg-[#38BDF8] text-[#06080E] font-semibold border border-cyan-300/40 shadow-[0_0_12px_rgba(0,242,254,0.2)] focus:ring-1 focus:ring-cyan-400',
+      'bg-[#416F9E] hover:bg-[#335980] dark:bg-[#648DBB] dark:hover:bg-[#7DA4D1] text-white dark:text-[#111318] font-semibold border border-transparent shadow-sm focus:ring-1 focus:ring-[#416F9E]',
     secondary:
-      'bg-[#101625] hover:bg-[#151D2E] text-slate-200 border border-white/10 hover:border-white/20 focus:ring-1 focus:ring-white/20',
+      'bg-white hover:bg-slate-50 dark:bg-[#1D232C] dark:hover:bg-[#242B36] text-slate-700 dark:text-[#E7EAF0] border border-slate-300 dark:border-[#303743] shadow-sm focus:ring-1 focus:ring-slate-400',
     outline:
-      'bg-transparent hover:bg-white/[0.04] text-slate-300 border border-white/15 hover:border-white/30 focus:ring-1 focus:ring-white/20',
+      'bg-transparent hover:bg-slate-100 dark:hover:bg-white/[0.05] text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-[#303743] focus:ring-1 focus:ring-slate-400',
     ghost:
-      'bg-transparent hover:bg-white/[0.06] text-slate-400 hover:text-white border border-transparent focus:ring-1 focus:ring-white/20',
+      'bg-transparent hover:bg-slate-100 dark:hover:bg-white/[0.06] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-transparent',
     danger:
-      'bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-500/30 focus:ring-1 focus:ring-red-500/40',
+      'bg-[#FDF0F1] hover:bg-[#FCE2E4] dark:bg-[#2C181A] dark:hover:bg-[#3D1E22] text-[#B74D55] dark:text-[#C66B70] border border-[#B74D55]/30 dark:border-[#C66B70]/40 focus:ring-1 focus:ring-[#B74D55]',
     technical:
-      'bg-[#0A101C] hover:bg-[#0E1626] text-[#00F2FE] font-mono border border-cyan-500/30 hover:border-cyan-400/60 shadow-[0_0_10px_rgba(0,242,254,0.08)]',
+      'bg-[#EBF2F9] hover:bg-[#DCE7F3] dark:bg-[#1A2838] dark:hover:bg-[#23354B] text-[#416F9E] dark:text-[#648DBB] font-mono border border-[#416F9E]/30 dark:border-[#648DBB]/40 shadow-sm',
   };
 
   const sizes = {
@@ -63,3 +63,5 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+
+export default Button;

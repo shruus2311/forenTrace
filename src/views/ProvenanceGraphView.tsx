@@ -31,13 +31,13 @@ export const ProvenanceGraphView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-[#303743]">
         <div>
-          <h1 className="font-display font-bold text-2xl text-white tracking-wide flex items-center gap-2.5">
-            <FolderGit2 className="w-5 h-5 text-[#818CF8]" />
-            <span>EVIDENCE LINEAGE & PROVENANCE GRAPH</span>
+          <h1 className="font-display font-bold text-2xl text-slate-900 dark:text-[#E7EAF0] tracking-wide flex items-center gap-2.5">
+            <FolderGit2 className="w-5 h-5 text-indigo-500 dark:text-[#818CF8]" />
+            <span>INVESTIGATION WORKSPACE & PROVENANCE GRAPH</span>
           </h1>
-          <p className="text-xs font-mono text-slate-400 mt-1">
+          <p className="text-xs font-mono text-slate-500 dark:text-[#9AA4B2] mt-1">
             Reconstructed parent-child execution vectors, network conduits, and exfiltration pathways.
           </p>
         </div>
@@ -64,18 +64,18 @@ export const ProvenanceGraphView: React.FC = () => {
       {/* Main Interactive Provenance Stage */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Visual Graph Board */}
-        <div className="lg:col-span-8 p-6 rounded-2xl bg-[#090D17] border border-white/[0.08] shadow-2xl relative min-h-[460px] flex flex-col justify-between overflow-hidden">
+        <div className="lg:col-span-8 p-6 rounded-2xl bg-white dark:bg-[#171B22] border border-slate-200 dark:border-[#303743] shadow-sm relative min-h-[460px] flex flex-col justify-between overflow-hidden">
           {/* Subtle Grid backdrop */}
-          <div className="absolute inset-0 bg-cyber-grid opacity-30 pointer-events-none" />
+          <div className="absolute inset-0 bg-forensic-grid opacity-30 pointer-events-none" />
 
           {/* Top HUD */}
-          <div className="relative z-10 flex items-center justify-between font-mono text-xs text-slate-400 pb-4 border-b border-white/[0.06]">
+          <div className="relative z-10 flex items-center justify-between font-mono text-xs text-slate-500 dark:text-[#9AA4B2] pb-4 border-b border-slate-100 dark:border-[#303743]/60">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#818CF8] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
               <span>CHAIN ID: PROV-HELIOS-01 // 5 NODES</span>
             </div>
-            <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-[#337D5C] dark:text-[#4D9B78] font-semibold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#337D5C] dark:bg-[#4D9B78]" />
               STATUS: RECONSTRUCTED
             </span>
           </div>
@@ -92,25 +92,25 @@ export const ProvenanceGraphView: React.FC = () => {
                     onClick={() => handleSelectNode(node)}
                     className={`p-4 rounded-xl border transition-all duration-150 cursor-pointer ${
                       isSelected
-                        ? 'bg-[#101728] border-cyan-400 shadow-[0_0_20px_rgba(0,242,254,0.12)] translate-x-1.5'
-                        : 'bg-[#0C111C] border-white/[0.08] hover:border-white/20'
+                        ? 'bg-[#EBF2F9] dark:bg-[#1D232C] border-[#416F9E] dark:border-[#648DBB] shadow-sm translate-x-1.5'
+                        : 'bg-slate-50/60 dark:bg-[#111318] border-slate-200 dark:border-[#303743] hover:border-slate-300 dark:hover:border-[#404957]'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div className="flex items-center gap-3">
-                        <span className="font-mono text-xs text-[#00F2FE] font-bold">
+                        <span className="font-mono text-xs text-[#416F9E] dark:text-[#648DBB] font-bold">
                           [{node.id}]
                         </span>
-                        <span className="font-sans font-semibold text-sm text-white">
+                        <span className="font-sans font-semibold text-sm text-slate-800 dark:text-white">
                           {node.label}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] font-mono text-[10px] text-slate-300">
+                        <span className="px-2 py-0.5 rounded bg-white dark:bg-[#171B22] border border-slate-200 dark:border-[#303743] font-mono text-[10px] text-slate-600 dark:text-slate-300">
                           {node.type}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-2.5">
-                        <span className="font-mono text-[11px] text-slate-400">{node.timestamp}</span>
+                        <span className="font-mono text-[11px] text-slate-500 dark:text-[#9AA4B2]">{node.timestamp}</span>
                         <SeverityBadge severity={node.severity} size="sm" />
                       </div>
                     </div>
@@ -118,7 +118,7 @@ export const ProvenanceGraphView: React.FC = () => {
 
                   {/* Flow Arrow to next node */}
                   {hasConnection && (
-                    <div className="flex justify-center my-1 text-[#818CF8]/60">
+                    <div className="flex justify-center my-1 text-slate-400 dark:text-slate-600">
                       <ArrowRight className="w-4 h-4 rotate-90" />
                     </div>
                   )}
@@ -128,69 +128,69 @@ export const ProvenanceGraphView: React.FC = () => {
           </div>
 
           {/* Bottom Telemetry Legend */}
-          <div className="relative z-10 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-slate-500">
+          <div className="relative z-10 pt-4 border-t border-slate-100 dark:border-[#303743]/60 flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-slate-500 dark:text-[#9AA4B2]">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block" /> SOURCE (EXPLOIT)
+                <span className="w-2 h-2 rounded-full bg-[#416F9E] inline-block" /> SOURCE (EXPLOIT)
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-indigo-400 inline-block" /> PROCESS (STAGER)
+                <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block" /> PROCESS (STAGER)
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-rose-400 inline-block" /> NETWORK (C2)
+                <span className="w-2 h-2 rounded-full bg-[#B74D55] inline-block" /> NETWORK (C2)
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-amber-400 inline-block" /> EXFILTRATION
+                <span className="w-2 h-2 rounded-full bg-[#A9772D] inline-block" /> EXFILTRATION
               </span>
             </div>
-            <span className="text-slate-400">RFC 3161 TIME-ATTESTED</span>
+            <span className="text-slate-500 dark:text-slate-400">RFC 3161 TIME-ATTESTED</span>
           </div>
         </div>
 
         {/* Right: Detailed Node Inspector */}
-        <div className="lg:col-span-4 rounded-2xl bg-[#0C111C] border border-cyan-500/30 p-6 shadow-2xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] font-mono text-xs">
-            <span className="text-[#00F2FE] font-bold">PROVENANCE NODE // {selectedNode.id}</span>
+        <div className="lg:col-span-4 rounded-2xl bg-white dark:bg-[#1D232C] border border-[#416F9E]/30 dark:border-[#648DBB]/40 p-6 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-[#303743] font-mono text-xs">
+            <span className="text-[#416F9E] dark:text-[#648DBB] font-bold">PROVENANCE NODE // {selectedNode.id}</span>
             <SeverityBadge severity={selectedNode.severity} size="sm" />
           </div>
 
           <div className="space-y-4 font-mono text-xs">
             <div>
-              <div className="text-slate-500 text-[10px]">EXECUTION EVENT:</div>
-              <div className="text-white font-bold text-sm mt-0.5">{selectedNode.label}</div>
+              <div className="text-slate-400 dark:text-slate-500 text-[10px]">EXECUTION EVENT:</div>
+              <div className="text-slate-900 dark:text-white font-bold text-sm mt-0.5">{selectedNode.label}</div>
             </div>
 
             <div>
-              <div className="text-slate-500 text-[10px]">EXACT TIMELAPSE REGISTER:</div>
-              <div className="text-cyan-300 mt-0.5 font-bold">{selectedNode.timestamp} UTC</div>
+              <div className="text-slate-400 dark:text-slate-500 text-[10px]">EXACT TIMELAPSE REGISTER:</div>
+              <div className="text-[#416F9E] dark:text-[#648DBB] mt-0.5 font-bold">{selectedNode.timestamp} UTC</div>
             </div>
 
             <div>
-              <div className="text-slate-500 text-[10px]">CATEGORY / VECTOR:</div>
-              <div className="text-white mt-0.5">{selectedNode.type}</div>
+              <div className="text-slate-400 dark:text-slate-500 text-[10px]">CATEGORY / VECTOR:</div>
+              <div className="text-slate-800 dark:text-slate-200 mt-0.5">{selectedNode.type}</div>
             </div>
 
             <div>
-              <div className="text-slate-500 text-[10px]">FORENSIC TELEMETRY FINDING:</div>
-              <p className="mt-1 p-3 rounded-lg bg-[#070A12] border border-white/[0.06] text-slate-300 font-sans text-xs leading-relaxed">
+              <div className="text-slate-400 dark:text-slate-500 text-[10px]">FORENSIC TELEMETRY FINDING:</div>
+              <p className="mt-1 p-3 rounded-lg bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-[#303743] text-slate-700 dark:text-slate-300 font-sans text-xs leading-relaxed">
                 {selectedNode.details}
               </p>
             </div>
 
             <div>
-              <div className="text-slate-500 text-[10px]">CHILD CONNECTIONS:</div>
+              <div className="text-slate-400 dark:text-slate-500 text-[10px]">CHILD CONNECTIONS:</div>
               <div className="mt-1.5 flex flex-wrap gap-2">
                 {selectedNode.connections.length > 0 ? (
                   selectedNode.connections.map((c) => (
                     <span
                       key={c}
-                      className="px-2.5 py-1 rounded bg-[#00F2FE]/10 text-[#00F2FE] border border-cyan-400/30 font-bold text-[11px]"
+                      className="px-2.5 py-1 rounded bg-[#EBF2F9] dark:bg-[#1A2838] text-[#416F9E] dark:text-[#648DBB] border border-[#416F9E]/30 dark:border-[#648DBB]/40 font-bold text-[11px]"
                     >
                       {c}
                     </span>
                   ))
                 ) : (
-                  <span className="text-slate-500 text-xs">TERMINAL NODE (EXFILTRATION HALTED)</span>
+                  <span className="text-slate-400 dark:text-slate-500 text-xs">TERMINAL NODE (EXFILTRATION HALTED)</span>
                 )}
               </div>
             </div>
@@ -219,3 +219,5 @@ export const ProvenanceGraphView: React.FC = () => {
     </div>
   );
 };
+
+export default ProvenanceGraphView;

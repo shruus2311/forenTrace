@@ -36,24 +36,24 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {toasts.map((toast) => {
           const typeConfigs = {
             success: {
-              border: 'border-emerald-500/30 bg-[#071712]/95',
-              accent: 'bg-emerald-400',
-              icon: <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />,
+              border: 'border-[#337D5C]/30 dark:border-[#4D9B78]/40 bg-white/95 dark:bg-[#142820]/95',
+              accent: 'bg-[#337D5C] dark:bg-[#4D9B78]',
+              icon: <CheckCircle2 className="w-4 h-4 text-[#337D5C] dark:text-[#4D9B78] shrink-0 mt-0.5" />,
             },
             warning: {
-              border: 'border-amber-500/30 bg-[#1A1208]/95',
-              accent: 'bg-amber-400',
-              icon: <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />,
+              border: 'border-[#A9772D]/30 dark:border-[#C69A54]/40 bg-white/95 dark:bg-[#2B2113]/95',
+              accent: 'bg-[#A9772D] dark:bg-[#C69A54]',
+              icon: <AlertTriangle className="w-4 h-4 text-[#A9772D] dark:text-[#C69A54] shrink-0 mt-0.5" />,
             },
             info: {
-              border: 'border-cyan-500/30 bg-[#091422]/95',
-              accent: 'bg-[#00F2FE]',
-              icon: <Info className="w-4 h-4 text-[#00F2FE] shrink-0 mt-0.5" />,
+              border: 'border-[#416F9E]/30 dark:border-[#648DBB]/40 bg-white/95 dark:bg-[#1A2838]/95',
+              accent: 'bg-[#416F9E] dark:bg-[#648DBB]',
+              icon: <Info className="w-4 h-4 text-[#416F9E] dark:text-[#648DBB] shrink-0 mt-0.5" />,
             },
             error: {
-              border: 'border-rose-500/30 bg-[#1C0A10]/95',
-              accent: 'bg-rose-500',
-              icon: <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />,
+              border: 'border-[#B74D55]/30 dark:border-[#C66B70]/40 bg-white/95 dark:bg-[#2C181A]/95',
+              accent: 'bg-[#B74D55] dark:bg-[#C66B70]',
+              icon: <ShieldAlert className="w-4 h-4 text-[#B74D55] dark:text-[#C66B70] shrink-0 mt-0.5" />,
             },
           };
 
@@ -62,21 +62,23 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           return (
             <div
               key={toast.id}
-              className={`pointer-events-auto relative overflow-hidden p-4 rounded-xl backdrop-blur-xl border ${config.border} shadow-2xl flex items-start gap-3 transition-all duration-200 animate-in fade-in slide-in-from-bottom-2`}
+              className={`pointer-events-auto relative overflow-hidden p-4 rounded-xl backdrop-blur-xl border ${config.border} shadow-xl flex items-start gap-3 transition-all duration-200 animate-in fade-in slide-in-from-bottom-2`}
             >
               <div className={`absolute left-0 top-0 bottom-0 w-1 ${config.accent}`} />
               {config.icon}
               <div className="flex-1 pr-2 min-w-0">
-                <div className="font-sans font-semibold text-xs text-slate-100">{toast.title}</div>
+                <div className="font-sans font-semibold text-xs text-slate-800 dark:text-[#E7EAF0]">
+                  {toast.title}
+                </div>
                 {toast.description && (
-                  <div className="text-[11px] font-mono text-slate-300 mt-1 leading-relaxed break-words">
+                  <div className="text-[11px] font-mono text-slate-600 dark:text-[#9AA4B2] mt-1 leading-relaxed break-words">
                     {toast.description}
                   </div>
                 )}
               </div>
               <button
                 onClick={() => dismissToast(toast.id)}
-                className="text-slate-500 hover:text-slate-300 p-0.5 rounded transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5 rounded transition-colors cursor-pointer"
                 title="Dismiss notification"
               >
                 <X className="w-3.5 h-3.5" />
@@ -96,3 +98,5 @@ export const useToast = () => {
   }
   return context;
 };
+
+export default { ToastProvider, useToast };

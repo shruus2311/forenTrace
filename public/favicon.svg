@@ -1,8 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="44" stroke="#00F2FE" stroke-width="3" stroke-dasharray="8 4" opacity="0.8"/>
-  <circle cx="50" cy="50" r="28" stroke="#10B981" stroke-width="2" opacity="0.9"/>
-  <polygon points="50,22 65,35 65,65 50,78 35,65 35,35" fill="none" stroke="#00F2FE" stroke-width="2.5"/>
-  <circle cx="50" cy="50" r="7" fill="#00F2FE"/>
-  <line x1="15" y1="50" x2="85" y2="50" stroke="#00F2FE" stroke-width="1.5" stroke-dasharray="2 4" opacity="0.5"/>
-  <line x1="50" y1="15" x2="50" y2="85" stroke="#00F2FE" stroke-width="1.5" stroke-dasharray="2 4" opacity="0.5"/>
+  <defs>
+    <linearGradient id="fGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#1E3A8A" />
+      <stop offset="50%" stopColor="#2563EB" />
+      <stop offset="100%" stopColor="#38BDF8" />
+    </linearGradient>
+    <linearGradient id="traceGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="100%" stopColor="#1D4ED8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Viewfinder Framing Corners -->
+  <path d="M 14 26 L 14 14 L 26 14" stroke="#416F9E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 74 14 L 86 14 L 86 26" stroke="#416F9E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 14 74 L 14 86 L 26 86" stroke="#416F9E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 74 86 L 86 86 L 86 74" stroke="#416F9E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Circuit Traces (Left) -->
+  <path d="M 2 38 L 10 38 L 16 46 L 22 46" stroke="url(#traceGrad)" stroke-width="2" stroke-linecap="round" />
+  <circle cx="2" cy="38" r="2.5" fill="#38BDF8" />
+  
+  <path d="M 0 50 L 18 50" stroke="url(#traceGrad)" stroke-width="2" stroke-linecap="round" />
+  <circle cx="2" cy="50" r="2.5" fill="#38BDF8" />
+
+  <path d="M 4 64 L 12 64 L 18 56 L 24 56" stroke="url(#traceGrad)" stroke-width="2" stroke-linecap="round" />
+  <circle cx="4" cy="64" r="2.5" fill="#38BDF8" />
+
+  <!-- Fingerprint concentric loops -->
+  <g stroke="#648DBB" stroke-width="2" stroke-linecap="round" opacity="0.85">
+    <ellipse cx="50" cy="46" rx="9" ry="11" fill="none" stroke-dasharray="16 6" />
+    <ellipse cx="50" cy="46" rx="16" ry="19" fill="none" stroke-dasharray="24 8" />
+    <ellipse cx="50" cy="47" rx="23" ry="26" fill="none" stroke-dasharray="32 10" />
+    <ellipse cx="50" cy="48" rx="29" ry="32" fill="none" stroke-dasharray="42 12" />
+  </g>
+
+  <!-- Sharp Geometric "F" Monogram -->
+  <!-- Vertical Stem -->
+  <polygon points="40,24 52,24 52,78 40,84" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5" />
+  <!-- Top Arm -->
+  <polygon points="52,24 74,24 74,36 52,36" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5" />
+  <!-- Middle Crossbar with Gradient -->
+  <polygon points="52,44 70,44 64,56 52,56" fill="url(#fGrad)" stroke="#60A5FA" stroke-width="1.2" />
 </svg>

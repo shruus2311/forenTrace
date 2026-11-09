@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
+import { ThemeProvider } from './design-system/ThemeProvider';
 import { ToastProvider } from './design-system/Toast';
 import { CommandMenu } from './design-system/CommandMenu';
 import { Sidebar } from './components/shell/Sidebar';
 import { TopBar } from './components/shell/TopBar';
+
+// Forensic Workspaces
 import { DashboardView } from './views/DashboardView';
-import { EvidenceRepositoryView } from './views/EvidenceRepositoryView';
+import { CaseManagementView } from './views/CaseManagementView';
 import { ProvenanceGraphView } from './views/ProvenanceGraphView';
+import { EvidenceRepositoryView } from './views/EvidenceRepositoryView';
+import { EvidenceAcquisitionView } from './views/EvidenceAcquisitionView';
+import { DiskForensicsView } from './views/DiskForensicsView';
 import { HexAnalyzerView } from './views/HexAnalyzerView';
+import { NetworkForensicsView } from './views/NetworkForensicsView';
+import { ThreatIntelligenceView } from './views/ThreatIntelligenceView';
 import { ChainOfCustodyView } from './views/ChainOfCustodyView';
+import { ForensicReportsView } from './views/ForensicReportsView';
+import { AuditTrailView } from './views/AuditTrailView';
+import { UserManagementView } from './views/UserManagementView';
+import { SystemSettingsView } from './views/SystemSettingsView';
 import { LoginView } from './views/LoginView';
+
 import { CASES } from './data/mockForensicsData';
 
-export const App = () => {
+export const AppContent = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [currentView, setCurrentView] = useState('dashboard');
   const [activeCaseId, setActiveCaseId] = useState('case-01');
@@ -31,7 +44,7 @@ export const App = () => {
 
   return (
     <ToastProvider>
-      <div className="flex h-screen w-screen overflow-hidden bg-[#06080E] text-slate-100 font-sans selection:bg-[#00F2FE] selection:text-black">
+      <div className="flex h-screen w-screen overflow-hidden bg-[#F5F6F8] dark:bg-[#111318] text-[#202631] dark:text-[#E7EAF0] font-sans transition-colors duration-200">
         {/* Workstation Sidebar */}
         <Sidebar
           currentView={currentView}
@@ -43,9 +56,9 @@ export const App = () => {
         />
 
         {/* Main Content Area */}
-        <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden bg-[#06080E] relative">
+        <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden bg-[#F5F6F8] dark:bg-[#111318] relative transition-colors duration-200">
           {/* Subtle Ambient Background Grid */}
-          <div className="absolute inset-0 bg-cyber-grid opacity-30 pointer-events-none z-0" />
+          <div className="absolute inset-0 bg-forensic-grid opacity-30 pointer-events-none z-0" />
 
           {/* Top Bar Navigation */}
           <TopBar
@@ -63,10 +76,33 @@ export const App = () => {
                   onNavigate={(view) => setCurrentView(view)}
                 />
               )}
-              {currentView === 'evidence' && <EvidenceRepositoryView />}
-              {currentView === 'provenance' && <ProvenanceGraphView />}
-              {currentView === 'hex' && <HexAnalyzerView />}
+              {currentView === 'cases' && (
+                <CaseManagementView
+                  activeCaseId={activeCaseId}
+                  onSelectCase={(id) => setActiveCaseId(id)}
+                  onNavigate={(view) => setCurrentView(view)}
+                />
+              )}
+              {(currentView === 'workspace' || currentView === 'timeline') && (
+                <ProvenanceGraphView />
+              )}
+              {(currentView === 'evidence' || currentView === 'integrity') && (
+                <EvidenceRepositoryView />
+              )}
+              {currentView === 'acquisition' && <EvidenceAcquisitionView />}
+              {(currentView === 'disk' || currentView === 'artifacts') && (
+                <DiskForensicsView />
+              )}
+              {(currentView === 'memory' || currentView === 'malware') && (
+                <HexAnalyzerView />
+              )}
+              {currentView === 'network' && <NetworkForensicsView />}
+              {currentView === 'threat-intel' && <ThreatIntelligenceView />}
               {currentView === 'custody' && <ChainOfCustodyView />}
+              {currentView === 'reports' && <ForensicReportsView />}
+              {currentView === 'audit' && <AuditTrailView />}
+              {currentView === 'users' && <UserManagementView />}
+              {currentView === 'settings' && <SystemSettingsView />}
             </div>
           </main>
         </div>
@@ -80,6 +116,14 @@ export const App = () => {
         />
       </div>
     </ToastProvider>
+  );
+};
+
+export const App = () => {
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <AppContent />
+    </ThemeProvider>
   );
 };
 

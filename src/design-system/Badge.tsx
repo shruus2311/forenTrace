@@ -12,26 +12,30 @@ export const IntegrityBadge: React.FC<IntegrityBadgeProps> = ({ status, size = '
     VERIFIED: {
       label: 'VERIFIED',
       icon: ShieldCheck,
-      classes: 'bg-[#081F17] text-emerald-300 border-emerald-500/30',
-      dotColor: 'bg-emerald-400',
+      classes:
+        'bg-[#EAF5F0] text-[#337D5C] border-[#337D5C]/30 dark:bg-[#142820] dark:text-[#4D9B78] dark:border-[#4D9B78]/40',
+      dotColor: 'bg-[#337D5C] dark:bg-[#4D9B78]',
     },
     FAILED_VERIFICATION: {
       label: 'FAILED VERIFICATION',
       icon: AlertOctagon,
-      classes: 'bg-[#290E14] text-rose-300 border-rose-500/30',
-      dotColor: 'bg-rose-500 animate-pulse',
+      classes:
+        'bg-[#FDF0F1] text-[#B74D55] border-[#B74D55]/30 dark:bg-[#2C181A] dark:text-[#C66B70] dark:border-[#C66B70]/40',
+      dotColor: 'bg-[#B74D55] dark:bg-[#C66B70] animate-pulse',
     },
     PENDING_ANALYSIS: {
       label: 'PENDING ANALYSIS',
       icon: Clock,
-      classes: 'bg-[#261808] text-amber-300 border-amber-500/30',
-      dotColor: 'bg-amber-400 animate-pulse',
+      classes:
+        'bg-[#FDF6EB] text-[#A9772D] border-[#A9772D]/30 dark:bg-[#2B2113] dark:text-[#C69A54] dark:border-[#C69A54]/40',
+      dotColor: 'bg-[#A9772D] dark:bg-[#C69A54] animate-pulse',
     },
     NOT_YET_VERIFIED: {
       label: 'NOT YET VERIFIED',
       icon: HelpCircle,
-      classes: 'bg-[#121622] text-slate-400 border-slate-700/40',
-      dotColor: 'bg-slate-500',
+      classes:
+        'bg-slate-100 text-slate-600 border-slate-300 dark:bg-[#1D232C] dark:text-slate-400 dark:border-slate-700/50',
+      dotColor: 'bg-slate-400 dark:bg-slate-500',
     },
   };
 
@@ -59,24 +63,29 @@ export interface SeverityBadgeProps {
 export const SeverityBadge: React.FC<SeverityBadgeProps> = ({ severity, size = 'md' }) => {
   const configs = {
     CRITICAL: {
-      classes: 'bg-[#2B0E14] text-rose-300 border-rose-500/30',
-      dot: 'bg-rose-500 animate-pulse',
+      classes:
+        'bg-[#FDF0F1] text-[#B74D55] border-[#B74D55]/30 dark:bg-[#2C181A] dark:text-[#C66B70] dark:border-[#C66B70]/40',
+      dot: 'bg-[#B74D55] dark:bg-[#C66B70] animate-pulse',
     },
     HIGH: {
-      classes: 'bg-[#2B1808] text-amber-300 border-amber-500/30',
-      dot: 'bg-amber-400',
+      classes:
+        'bg-[#FDF6EB] text-[#A9772D] border-[#A9772D]/30 dark:bg-[#2B2113] dark:text-[#C69A54] dark:border-[#C69A54]/40',
+      dot: 'bg-[#A9772D] dark:bg-[#C69A54]',
     },
     MEDIUM: {
-      classes: 'bg-[#25220C] text-yellow-300 border-yellow-500/30',
-      dot: 'bg-yellow-400',
+      classes:
+        'bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-600/30',
+      dot: 'bg-amber-500',
     },
     LOW: {
-      classes: 'bg-[#0E1B2B] text-sky-300 border-sky-500/30',
-      dot: 'bg-sky-400',
+      classes:
+        'bg-[#EBF2F9] text-[#416F9E] border-[#416F9E]/30 dark:bg-[#1A2838] dark:text-[#648DBB] dark:border-[#648DBB]/40',
+      dot: 'bg-[#416F9E] dark:bg-[#648DBB]',
     },
     INFORMATIONAL: {
-      classes: 'bg-[#101524] text-slate-400 border-slate-700/40',
-      dot: 'bg-slate-500',
+      classes:
+        'bg-slate-100 text-slate-600 border-slate-300 dark:bg-[#171B22] dark:text-slate-400 dark:border-slate-700/40',
+      dot: 'bg-slate-400 dark:bg-slate-500',
     },
   };
 
@@ -88,8 +97,12 @@ export const SeverityBadge: React.FC<SeverityBadgeProps> = ({ severity, size = '
       className={`inline-flex items-center gap-1.5 font-mono font-semibold rounded-md border ${config.classes} ${sizeClasses} tracking-wider uppercase select-none`}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
-      {severity === 'CRITICAL' && <AlertTriangle className="w-2.5 h-2.5 shrink-0 text-rose-400" />}
+      {severity === 'CRITICAL' && (
+        <AlertTriangle className="w-2.5 h-2.5 shrink-0 text-[#B74D55] dark:text-[#C66B70]" />
+      )}
       <span>{severity}</span>
     </span>
   );
 };
+
+export default { IntegrityBadge, SeverityBadge };

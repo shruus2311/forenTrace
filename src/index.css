@@ -3,18 +3,63 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
+
+  /* Official FORENTRACE Light Theme */
+  --bg-main: #F5F6F8;
+  --bg-secondary: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-hover: #F0F2F6;
+  --border: #E1E5EA;
+  --border-subtle: #EBEFF3;
+  --text-primary: #202631;
+  --text-secondary: #687384;
+  --text-muted: #8E9BAE;
+  --accent: #416F9E;
+  --accent-hover: #335980;
+  --accent-light: #EBF2F9;
+  --success: #337D5C;
+  --success-bg: #EAF5F0;
+  --warning: #A9772D;
+  --warning-bg: #FDF6EB;
+  --critical: #B74D55;
+  --critical-bg: #FDF0F1;
+}
+
+.dark {
   color-scheme: dark;
+
+  /* Official FORENTRACE Dark Theme */
+  --bg-main: #111318;
+  --bg-secondary: #171B22;
+  --surface: #1D232C;
+  --surface-hover: #242B36;
+  --border: #303743;
+  --border-subtle: #242B37;
+  --text-primary: #E7EAF0;
+  --text-secondary: #9AA4B2;
+  --text-muted: #657182;
+  --accent: #648DBB;
+  --accent-hover: #7DA4D1;
+  --accent-light: #1A2838;
+  --success: #4D9B78;
+  --success-bg: #142820;
+  --warning: #C69A54;
+  --warning-bg: #2B2113;
+  --critical: #C66B70;
+  --critical-bg: #2C181A;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #06080E;
-  color: #e2e8f0;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
   overflow-x: hidden;
   user-select: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom Sleek Scrollbar */
@@ -23,76 +68,36 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #06080E;
+  background: var(--bg-main);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--border);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 242, 254, 0.4);
+  background: var(--accent);
 }
 
-/* Forensic Intelligence Surface Tokens */
-.forensic-surface {
-  background: #0C111C;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Reusable Forensic Surfaces */
+.forensic-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
-.forensic-surface-elevated {
-  background: #101625;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+.dark .forensic-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-.forensic-surface-accent {
-  background: #0C1322;
-  border: 1px solid rgba(0, 242, 254, 0.25);
-  box-shadow: 0 0 20px rgba(0, 242, 254, 0.05);
+.forensic-card-subtle {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
 }
 
-.forensic-surface-emerald {
-  background: #081714;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.05);
-}
-
-.forensic-surface-critical {
-  background: #180B0F;
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.05);
-}
-
-/* High-Precision Cyber Grid */
-.bg-cyber-grid {
+/* Subtle Data Grid */
+.bg-forensic-grid {
   background-size: 32px 32px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-}
-
-.bg-dot-matrix {
-  background-image: radial-gradient(rgba(0, 242, 254, 0.12) 1px, transparent 0);
-  background-size: 24px 24px;
-}
-
-/* Glassmorphism Surface Stack for backwards compatibility */
-.glass-surface {
-  background: rgba(12, 17, 28, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
-}
-
-.glass-panel-cyan {
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.04) 0%, rgba(12, 17, 28, 0.8) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 242, 254, 0.2);
-}
-
-.glass-panel-red {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(12, 17, 28, 0.8) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+    linear-gradient(to right, rgba(100, 141, 187, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 141, 187, 0.05) 1px, transparent 1px);
 }
