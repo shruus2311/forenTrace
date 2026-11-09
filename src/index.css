@@ -9,67 +9,90 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #020408;
+  background-color: #06080E;
   color: #e2e8f0;
   overflow-x: hidden;
   user-select: none;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #020408;
+  background: #06080E;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 242, 254, 0.25);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 242, 254, 0.6);
+  background: rgba(0, 242, 254, 0.4);
 }
 
-/* Glassmorphism Surface Stack inspired by Awwwards Manifesto */
-.glass-surface {
-  background: rgba(4, 8, 18, 0.65);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+/* Forensic Intelligence Surface Tokens */
+.forensic-surface {
+  background: #0C111C;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.forensic-surface-elevated {
+  background: #101625;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.forensic-surface-accent {
+  background: #0C1322;
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.05);
+}
+
+.forensic-surface-emerald {
+  background: #081714;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.05);
+}
+
+.forensic-surface-critical {
+  background: #180B0F;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.05);
+}
+
+/* High-Precision Cyber Grid */
+.bg-cyber-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.bg-dot-matrix {
+  background-image: radial-gradient(rgba(0, 242, 254, 0.12) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Glassmorphism Surface Stack for backwards compatibility */
+.glass-surface {
+  background: rgba(12, 17, 28, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
 }
 
 .glass-panel-cyan {
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.05) 0%, rgba(4, 8, 18, 0.7) 100%);
-  backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.04) 0%, rgba(12, 17, 28, 0.8) 100%);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 242, 254, 0.2);
-  box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05), inset 0 1px 0 rgba(0, 242, 254, 0.3);
 }
 
 .glass-panel-red {
-  background: linear-gradient(135deg, rgba(255, 46, 84, 0.07) 0%, rgba(4, 8, 18, 0.7) 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 46, 84, 0.3);
-  box-shadow: 0 10px 30px rgba(255, 46, 84, 0.08), inset 0 1px 0 rgba(255, 46, 84, 0.3);
-}
-
-/* Cybernetic Grid Background */
-.bg-cyber-grid {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(0, 242, 254, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
-}
-
-/* Subtle CRT Scanline overlay */
-.scanline {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0) 50%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.3)
-  );
-  background-size: 100% 4px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(12, 17, 28, 0.8) 100%);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }

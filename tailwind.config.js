@@ -15,6 +15,21 @@ export default {
         "alert-red": "#FF2E54",
         "amber-gold": "#F59E0B",
         "border-glow": "rgba(0, 242, 254, 0.2)",
+        // Dark Forensic Intelligence tokens
+        forensic: {
+          950: "#06080E",
+          900: "#090D16",
+          850: "#0C111C",
+          800: "#101625",
+          750: "#151C2E",
+          700: "#1C2438",
+          accent: "#00F2FE",
+          accentHover: "#38BDF8",
+          emerald: "#10B981",
+          amber: "#F59E0B",
+          crimson: "#EF4444",
+          violet: "#818CF8",
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

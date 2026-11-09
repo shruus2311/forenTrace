@@ -8,6 +8,8 @@ import {
   Activity,
   Maximize2,
   Minimize2,
+  Download,
+  Share2,
 } from 'lucide-react';
 import { Card } from '../design-system/Card';
 import { Button } from '../design-system/Button';
@@ -29,7 +31,7 @@ export const ProvenanceGraphView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div>
           <h1 className="font-display font-bold text-2xl text-white tracking-wide flex items-center gap-2.5">
             <FolderGit2 className="w-5 h-5 text-[#818CF8]" />
@@ -62,22 +64,25 @@ export const ProvenanceGraphView: React.FC = () => {
       {/* Main Interactive Provenance Stage */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Visual Graph Board */}
-        <div className="lg:col-span-8 p-6 rounded-2xl bg-[#0B0E17] border border-white/10 shadow-2xl relative min-h-[460px] flex flex-col justify-between overflow-hidden">
+        <div className="lg:col-span-8 p-6 rounded-2xl bg-[#090D17] border border-white/[0.08] shadow-2xl relative min-h-[460px] flex flex-col justify-between overflow-hidden">
           {/* Subtle Grid backdrop */}
           <div className="absolute inset-0 bg-cyber-grid opacity-30 pointer-events-none" />
 
           {/* Top HUD */}
-          <div className="relative z-10 flex items-center justify-between font-mono text-xs text-slate-400 pb-4 border-b border-white/5">
+          <div className="relative z-10 flex items-center justify-between font-mono text-xs text-slate-400 pb-4 border-b border-white/[0.06]">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#818CF8] animate-pulse" />
               <span>CHAIN ID: PROV-HELIOS-01 // 5 NODES</span>
             </div>
-            <span className="text-emerald-400">STATUS: RECONSTRUCTED</span>
+            <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              STATUS: RECONSTRUCTED
+            </span>
           </div>
 
           {/* Interactive Flow Nodes */}
-          <div className="relative z-10 my-8 space-y-4">
-            {PROVENANCE_GRAPH_NODES.map((node, index) => {
+          <div className="relative z-10 my-6 space-y-3">
+            {PROVENANCE_GRAPH_NODES.map((node) => {
               const isSelected = selectedNode.id === node.id;
               const hasConnection = node.connections.length > 0;
 
@@ -85,10 +90,10 @@ export const ProvenanceGraphView: React.FC = () => {
                 <div key={node.id} className="relative">
                   <div
                     onClick={() => handleSelectNode(node)}
-                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                    className={`p-4 rounded-xl border transition-all duration-150 cursor-pointer ${
                       isSelected
-                        ? 'bg-[#121622] border-[#00F2FE] shadow-[0_0_20px_rgba(0,242,254,0.15)] translate-x-2'
-                        : 'bg-[#0E121B] border-white/10 hover:border-white/20'
+                        ? 'bg-[#101728] border-cyan-400 shadow-[0_0_20px_rgba(0,242,254,0.12)] translate-x-1.5'
+                        : 'bg-[#0C111C] border-white/[0.08] hover:border-white/20'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -99,12 +104,12 @@ export const ProvenanceGraphView: React.FC = () => {
                         <span className="font-sans font-semibold text-sm text-white">
                           {node.label}
                         </span>
-                        <span className="px-2 py-0.5 rounded bg-black/50 border border-white/10 font-mono text-[10px] text-slate-300">
+                        <span className="px-2 py-0.5 rounded bg-black/40 border border-white/[0.08] font-mono text-[10px] text-slate-300">
                           {node.type}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2.5">
                         <span className="font-mono text-[11px] text-slate-400">{node.timestamp}</span>
                         <SeverityBadge severity={node.severity} size="sm" />
                       </div>
@@ -123,20 +128,28 @@ export const ProvenanceGraphView: React.FC = () => {
           </div>
 
           {/* Bottom Telemetry Legend */}
-          <div className="relative z-10 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-slate-500">
+          <div className="relative z-10 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-slate-500">
             <div className="flex items-center gap-4">
-              <span>● SOURCE (EXPLOIT)</span>
-              <span>● PROCESS (STAGER)</span>
-              <span>● NETWORK (C2)</span>
-              <span>● EXFILTRATION</span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block" /> SOURCE (EXPLOIT)
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-indigo-400 inline-block" /> PROCESS (STAGER)
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-rose-400 inline-block" /> NETWORK (C2)
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-amber-400 inline-block" /> EXFILTRATION
+              </span>
             </div>
-            <span>RFC 3161 TIME-ATTESTED</span>
+            <span className="text-slate-400">RFC 3161 TIME-ATTESTED</span>
           </div>
         </div>
 
         {/* Right: Detailed Node Inspector */}
-        <div className="lg:col-span-4 rounded-2xl bg-[#0E121B] border border-cyan-500/30 p-6 shadow-2xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/10 font-mono text-xs">
+        <div className="lg:col-span-4 rounded-2xl bg-[#0C111C] border border-cyan-500/30 p-6 shadow-2xl space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] font-mono text-xs">
             <span className="text-[#00F2FE] font-bold">PROVENANCE NODE // {selectedNode.id}</span>
             <SeverityBadge severity={selectedNode.severity} size="sm" />
           </div>
@@ -159,19 +172,19 @@ export const ProvenanceGraphView: React.FC = () => {
 
             <div>
               <div className="text-slate-500 text-[10px]">FORENSIC TELEMETRY FINDING:</div>
-              <p className="mt-1 p-3 rounded bg-black/60 border border-white/5 text-slate-300 font-sans text-xs leading-relaxed">
+              <p className="mt-1 p-3 rounded-lg bg-[#070A12] border border-white/[0.06] text-slate-300 font-sans text-xs leading-relaxed">
                 {selectedNode.details}
               </p>
             </div>
 
             <div>
               <div className="text-slate-500 text-[10px]">CHILD CONNECTIONS:</div>
-              <div className="mt-1 flex gap-2">
+              <div className="mt-1.5 flex flex-wrap gap-2">
                 {selectedNode.connections.length > 0 ? (
                   selectedNode.connections.map((c) => (
                     <span
                       key={c}
-                      className="px-2 py-1 rounded bg-[#00F2FE]/10 text-[#00F2FE] border border-[#00F2FE]/30 font-bold"
+                      className="px-2.5 py-1 rounded bg-[#00F2FE]/10 text-[#00F2FE] border border-cyan-400/30 font-bold text-[11px]"
                     >
                       {c}
                     </span>
@@ -195,6 +208,7 @@ export const ProvenanceGraphView: React.FC = () => {
                     description: `Extracted forensic snapshot for ${selectedNode.id}`,
                   });
                 }}
+                icon={<Share2 className="w-3.5 h-3.5" />}
               >
                 Export Forensic Sub-Graph
               </Button>

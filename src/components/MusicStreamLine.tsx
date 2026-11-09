@@ -55,7 +55,7 @@ export const MusicStreamLine = ({ color = "text-[#00F2FE]" }: MusicStreamLinePro
   return (
     <button
       onClick={toggleSound}
-      className="flex items-center gap-3 px-3 py-1.5 rounded-full glass-surface border border-cyan-500/20 hover:border-cyan-500/50 transition-colors group cursor-pointer"
+      className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#060910] border border-white/[0.08] hover:border-cyan-400/40 transition-colors group cursor-pointer"
       title={isPlaying ? "Mute Cyber Telemetry" : "Activate Cyber Telemetry Sound"}
     >
       {/* Animated Sound Equalizer Bars */}

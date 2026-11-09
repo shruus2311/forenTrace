@@ -8,11 +8,13 @@ import {
   Cpu,
   CheckCircle2,
   HardDrive,
+  CreditCard,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '../design-system/Button';
 import { cyberAudio } from '../lib/audio';
 
-interface LoginViewProps {
+export interface LoginViewProps {
   onLoginSuccess: () => void;
 }
 
@@ -45,29 +47,32 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-between items-center p-6 bg-[#07090E] relative overflow-hidden select-none">
+    <div className="min-h-screen w-full flex flex-col justify-between items-center p-6 bg-[#06080E] relative overflow-hidden select-none">
       {/* Background Cybernetic Texture */}
-      <div className="absolute inset-0 bg-cyber-grid opacity-35 pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00F2FE]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute inset-0 bg-cyber-grid opacity-30 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       {/* Top Banner */}
-      <div className="relative z-10 w-full max-w-4xl flex items-center justify-between text-[11px] font-mono text-slate-500 pb-6 border-b border-white/5">
+      <div className="relative z-10 w-full max-w-4xl flex items-center justify-between text-[11px] font-mono text-slate-500 pb-6 border-b border-white/[0.08]">
         <div className="flex items-center gap-2 text-slate-400">
           <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
           <span>OFFICIAL FORENSIC WORKSTATION // ENCRYPTED SESSION</span>
         </div>
-        <div className="hidden sm:flex items-center gap-3">
-          <span>HSM: FIPS 140-3 VALIDATED</span>
+        <div className="hidden sm:flex items-center gap-4">
+          <span className="flex items-center gap-1.5">
+            <ShieldCheck className="w-3 h-3 text-emerald-400" />
+            HSM: FIPS 140-3 VALIDATED
+          </span>
           <span>NODE: US-EAST-04</span>
         </div>
       </div>
 
       {/* Centerpiece Authentication Terminal Card */}
       <div className="relative z-10 w-full max-w-md my-auto">
-        <div className="p-8 rounded-2xl bg-[#0B0F17]/95 border border-white/15 shadow-2xl backdrop-blur-2xl">
+        <div className="p-8 rounded-2xl bg-[#090D17]/95 border border-white/[0.1] shadow-2xl backdrop-blur-2xl">
           {/* Brand & Crest */}
-          <div className="text-center pb-6 border-b border-white/10">
-            <div className="mx-auto w-12 h-12 rounded-xl bg-cyan-950/80 border border-[#00F2FE]/40 flex items-center justify-center shadow-[0_0_20px_rgba(0,242,254,0.3)] mb-3">
+          <div className="text-center pb-6 border-b border-white/[0.08]">
+            <div className="mx-auto w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(0,242,254,0.25)] mb-3">
               <Radio className="w-6 h-6 text-[#00F2FE]" />
             </div>
             <h1 className="font-display font-extrabold text-2xl tracking-wider text-white">
@@ -88,8 +93,8 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
               }}
               className={`py-2 rounded-lg transition-all cursor-pointer ${
                 authMode === 'PASSWORD'
-                  ? 'bg-[#121622] text-[#00F2FE] border border-[#00F2FE]/40 font-bold'
-                  : 'text-slate-400 hover:text-white border border-transparent'
+                  ? 'bg-[#101726] text-[#00F2FE] border border-cyan-400/40 font-bold shadow-[0_0_12px_rgba(0,242,254,0.1)]'
+                  : 'text-slate-400 hover:text-white border border-transparent hover:bg-white/[0.04]'
               }`}
             >
               INVESTIGATOR ID
@@ -102,41 +107,41 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
               }}
               className={`py-2 rounded-lg transition-all cursor-pointer ${
                 authMode === 'FIDO2'
-                  ? 'bg-[#121622] text-[#00F2FE] border border-[#00F2FE]/40 font-bold'
-                  : 'text-slate-400 hover:text-white border border-transparent'
+                  ? 'bg-[#101726] text-[#00F2FE] border border-cyan-400/40 font-bold shadow-[0_0_12px_rgba(0,242,254,0.1)]'
+                  : 'text-slate-400 hover:text-white border border-transparent hover:bg-white/[0.04]'
               }`}
             >
               FIDO2 TOKEN / CAC
             </button>
           </div>
 
-          {/* Auth Form */}
+          {/* Form Content */}
           {authMode === 'PASSWORD' ? (
             <form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs">
               <div>
-                <label className="text-slate-400 block mb-1 text-[11px]">
-                  INVESTIGATOR BADGE ID
+                <label className="block text-slate-400 text-[10px] uppercase mb-1">
+                  Investigator Identifier
                 </label>
-                <input
-                  type="text"
-                  value={investigatorId}
-                  onChange={(e) => setInvestigatorId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#07090E] border border-white/10 text-white font-mono text-xs focus:border-[#00F2FE]/60 outline-none transition-colors"
-                  placeholder="e.g. INV-9082"
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={investigatorId}
+                    onChange={(e) => setInvestigatorId(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-lg bg-[#060910] border border-white/10 text-white focus:border-cyan-400/50 outline-none transition-colors"
+                  />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                </div>
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1 text-[11px]">
-                  CASE ENCRYPTION PASSPHRASE
+                <label className="block text-slate-400 text-[10px] uppercase mb-1">
+                  Enclave Master Passphrase
                 </label>
                 <input
                   type="password"
                   value={passphrase}
                   onChange={(e) => setPassphrase(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#07090E] border border-white/10 text-white font-mono text-xs focus:border-[#00F2FE]/60 outline-none transition-colors"
-                  required
+                  className="w-full px-3.5 py-2.5 rounded-lg bg-[#060910] border border-white/10 text-white focus:border-cyan-400/50 outline-none transition-colors"
                 />
               </div>
 
@@ -144,51 +149,51 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
                 <Button
                   type="submit"
                   variant="primary"
-                  size="lg"
-                  className="w-full"
+                  size="md"
                   disabled={isAuthenticating}
+                  className="w-full py-2.5"
                   icon={<ArrowRight className="w-4 h-4" />}
                 >
-                  {isAuthenticating ? 'VERIFYING CREDENTIALS...' : 'AUTHENTICATE & ENTER'}
+                  {isAuthenticating ? 'Decrypting Workstation...' : 'Authenticate & Unlock'}
                 </Button>
               </div>
             </form>
           ) : (
-            <div className="space-y-5 text-center py-4 font-mono text-xs">
-              <div className="w-16 h-16 mx-auto rounded-full bg-[#121622] border border-[#00F2FE]/40 flex items-center justify-center text-[#00F2FE] animate-pulse">
-                <Key className="w-8 h-8" />
-              </div>
-              <div>
-                <div className="text-white font-semibold text-sm">HARDWARE TOKEN READY</div>
-                <p className="text-slate-400 text-xs mt-1 font-sans">
-                  Insert your FIDO2 YubiKey, PIV, or Common Access Card (CAC) into the hardware terminal.
-                </p>
+            <div className="space-y-4 font-mono text-xs text-center py-2">
+              <div className="p-5 rounded-xl bg-[#060910] border border-white/10 flex flex-col items-center justify-center space-y-3">
+                <div className="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-400/30 flex items-center justify-center text-[#00F2FE]">
+                  <CreditCard className="w-6 h-6 animate-pulse" />
+                </div>
+                <div>
+                  <div className="text-white font-bold">PIV / CAC HARDWARE CHIP</div>
+                  <div className="text-slate-400 text-[10px] mt-0.5">
+                    Insert government smartcard or FIDO2 hardware authenticator
+                  </div>
+                </div>
               </div>
 
               <Button
                 variant="primary"
-                size="lg"
-                className="w-full"
-                onClick={handleSimulateToken}
+                size="md"
                 disabled={isAuthenticating}
+                onClick={handleSimulateToken}
+                className="w-full py-2.5"
+                icon={<Lock className="w-4 h-4" />}
               >
-                {isAuthenticating ? 'READING ENCLAVE KEY...' : 'SIMULATE HARDWARE TOUCH'}
+                {isAuthenticating ? 'Reading Hardware Enclave...' : 'Simulate Token Insertion'}
               </Button>
             </div>
           )}
-
-          {/* Legal Warning Notice */}
-          <div className="mt-6 pt-4 border-t border-white/5 text-center">
-            <p className="text-[10px] font-mono text-slate-500 leading-relaxed">
-              WARNING: Authorized DFIR personnel only. All access, keystrokes, and memory transfers are cryptographically logged under chain of custody.
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* Bottom Footer */}
-      <div className="relative z-10 w-full max-w-4xl text-center text-[10px] font-mono text-slate-600 pt-6 border-t border-white/5">
-        FORENTRACE KERNEL v2026.11 // CRYPTOGRAPHIC CHAIN OF CUSTODY CERTIFIED
+      {/* Bottom Footer Telemetry */}
+      <div className="relative z-10 w-full max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono text-slate-500 pt-6 border-t border-white/[0.08]">
+        <div>ISO/IEC 27037:2012 COMPLIANT // FORENSIC WRITE-BLOCKING ENFORCED</div>
+        <div className="flex items-center gap-4">
+          <span>HSM SHA-512 ROOT</span>
+          <span>LEGAL HOLD CONTINUITY</span>
+        </div>
       </div>
     </div>
   );

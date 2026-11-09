@@ -3,7 +3,7 @@ import { Search, ShieldAlert, Activity, User, Bell, Key, LogOut } from 'lucide-r
 import MusicStreamLine from '../MusicStreamLine';
 import { cyberAudio } from '../../lib/audio';
 
-interface TopBarProps {
+export interface TopBarProps {
   onOpenCommandMenu: () => void;
   activeCaseNumber: string;
   onLogout?: () => void;
@@ -27,42 +27,42 @@ export const TopBar: React.FC<TopBarProps> = ({
   }, []);
 
   return (
-    <header className="h-16 bg-[#0B0F17]/95 backdrop-blur-md border-b border-white/10 px-4 md:px-6 flex items-center justify-between gap-4 z-20 select-none">
+    <header className="h-16 bg-[#080C15]/95 backdrop-blur-md border-b border-white/[0.08] px-4 md:px-6 flex items-center justify-between gap-4 z-20 select-none">
       {/* Left: Active Investigation Badge & Search Trigger */}
       <div className="flex items-center gap-4 flex-1 max-w-xl">
-        <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded bg-[#121622] border border-white/10 font-mono text-xs text-slate-300">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+        <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#101625] border border-white/10 font-mono text-xs text-slate-300">
+          <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
           <span className="text-[#00F2FE] font-bold">{activeCaseNumber}</span>
-          <span className="text-slate-500">|</span>
-          <span className="text-red-400 font-semibold">SEV-1 TRIAGE</span>
+          <span className="text-slate-600">|</span>
+          <span className="text-rose-400 font-semibold tracking-wider">SEV-1 TRIAGE</span>
         </div>
 
         {/* Global Command Search Box */}
         <button
           onClick={onOpenCommandMenu}
-          className="flex-1 flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-[#07090E] border border-white/10 hover:border-[#00F2FE]/40 text-slate-400 hover:text-slate-200 text-xs font-sans transition-colors cursor-pointer text-left"
+          className="flex-1 flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-[#060910] border border-white/10 hover:border-cyan-400/40 text-slate-400 hover:text-slate-200 text-xs font-sans transition-colors cursor-pointer text-left"
         >
-          <div className="flex items-center gap-2">
-            <Search className="w-3.5 h-3.5 text-[#00F2FE]" />
+          <div className="flex items-center gap-2 min-w-0">
+            <Search className="w-3.5 h-3.5 text-[#00F2FE] shrink-0" />
             <span className="truncate">Search artifacts, hashes, MITRE tactics...</span>
           </div>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] font-mono text-slate-400">
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[10px] font-mono text-slate-400 shrink-0 ml-2">
             Ctrl K
           </kbd>
         </button>
       </div>
 
       {/* Center: Classification Banner */}
-      <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded bg-red-950/30 border border-red-500/20 text-red-300 font-mono text-[10px] tracking-widest uppercase">
-        <ShieldAlert className="w-3 h-3 text-red-400" />
-        <span>RESTRICTED // EVIDENTIARY CHAIN STRICT // NOFORN</span>
+      <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded bg-[#2B0E14] border border-rose-500/25 text-rose-300 font-mono text-[10px] tracking-widest uppercase">
+        <ShieldAlert className="w-3 h-3 text-rose-400" />
+        <span>RESTRICTED // EVIDENTIARY CHAIN STRICT // ISO 27037</span>
       </div>
 
       {/* Right: Telemetry & User Controls */}
       <div className="flex items-center gap-3">
         {/* UTC Clock */}
-        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/40 border border-white/5 font-mono text-xs text-cyan-300">
-          <Activity className="w-3 h-3 text-emerald-400" />
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#060910] border border-white/[0.08] font-mono text-xs text-cyan-300">
+          <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
           <span>{utcTime}</span>
         </div>
 
@@ -70,12 +70,12 @@ export const TopBar: React.FC<TopBarProps> = ({
         <MusicStreamLine />
 
         {/* Investigator Credentials */}
-        <div className="flex items-center gap-2.5 pl-2 border-l border-white/10">
-          <div className="w-8 h-8 rounded-full bg-[#121622] border border-[#00F2FE]/30 flex items-center justify-center text-[#00F2FE] shrink-0">
+        <div className="flex items-center gap-2.5 pl-2 border-l border-white/[0.08]">
+          <div className="w-8 h-8 rounded-full bg-[#101726] border border-cyan-400/30 flex items-center justify-center text-[#00F2FE] shrink-0">
             <User className="w-4 h-4" />
           </div>
           <div className="hidden md:block text-left font-mono">
-            <div className="text-xs text-white font-medium flex items-center gap-1">
+            <div className="text-xs text-white font-medium flex items-center gap-1.5">
               <span>V. Raghunath</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             </div>
@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 onLogout();
               }}
               title="Lock Workstation"
-              className="p-1.5 rounded text-slate-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+              className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
             </button>

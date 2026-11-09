@@ -88,7 +88,7 @@ export const HexAnalyzerView: React.FC = () => {
     showToast({
       type: 'info',
       title: 'Neural YARA Scan Executing',
-      description: 'Evaluating x86_64 unbacked shellcode signatures...',
+      description: 'Evaluating x86_64 unbacked shellcode signatures against live VAD memory...',
     });
 
     setTimeout(() => {
@@ -105,7 +105,7 @@ export const HexAnalyzerView: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
         <div>
           <h1 className="font-display font-bold text-2xl text-white tracking-wide flex items-center gap-2.5">
             <Binary className="w-5 h-5 text-[#00F2FE]" />
@@ -130,11 +130,11 @@ export const HexAnalyzerView: React.FC = () => {
       </div>
 
       {/* Hex Workstation Terminal Window */}
-      <div className="rounded-2xl bg-[#0B0F17] border border-white/10 shadow-2xl overflow-hidden">
+      <div className="rounded-2xl bg-[#090D17] border border-white/[0.08] shadow-2xl overflow-hidden">
         {/* Terminal Header */}
-        <div className="bg-[#07090E] px-5 py-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-slate-400">
+        <div className="bg-[#070A12] px-5 py-3 border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-slate-400">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
             <span className="ml-2 text-white font-semibold">
@@ -143,14 +143,14 @@ export const HexAnalyzerView: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">
-            <span className="text-red-400 font-bold">● ENTROPY: 7.91 (SHELLCODE OBFS)</span>
+            <span className="text-rose-400 font-bold">● ENTROPY: 7.91 (SHELLCODE OBFS)</span>
             <span className="text-[#00F2FE]">ARCH: AMD64</span>
             <span className="text-emerald-400">OFFSET: 0x0000 - 0x0060</span>
           </div>
         </div>
 
         {/* Search Offset Bar */}
-        <div className="px-5 py-2.5 bg-[#090C14] border-b border-white/5 flex items-center justify-between gap-4">
+        <div className="px-5 py-2.5 bg-[#060910] border-b border-white/[0.06] flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs font-mono text-slate-400 flex-1 max-w-md">
             <Search className="w-3.5 h-3.5 text-[#00F2FE]" />
             <input
@@ -158,7 +158,7 @@ export const HexAnalyzerView: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search hex string (e.g., '31 C0' or '/bin')..."
-              className="bg-transparent border-none outline-none text-white font-mono text-xs w-full"
+              className="bg-transparent border-none outline-none text-white font-mono text-xs w-full placeholder:text-slate-600"
             />
           </div>
           <div className="text-[11px] font-mono text-slate-500">
@@ -168,14 +168,14 @@ export const HexAnalyzerView: React.FC = () => {
 
         {/* Hex Grid Table */}
         <div className="p-6 overflow-x-auto font-mono text-xs md:text-sm">
-          <div className="min-w-[680px] space-y-2">
+          <div className="min-w-[680px] space-y-1.5">
             {HEX_DATASET.map((row) => (
               <div
                 key={row.offset}
                 className={`flex items-center justify-between p-2 rounded-lg transition-colors ${
                   row.isAnomaly
-                    ? 'bg-red-950/20 border border-red-500/30'
-                    : 'hover:bg-white/5 border border-transparent'
+                    ? 'bg-[#260E14] border border-rose-500/30'
+                    : 'hover:bg-white/[0.03] border border-transparent'
                 }`}
               >
                 {/* Offset Register */}
@@ -193,9 +193,9 @@ export const HexAnalyzerView: React.FC = () => {
                         onClick={() => handleByteSelect(row.offset, byte, idx)}
                         className={`w-6 h-6 flex items-center justify-center rounded text-[11px] font-mono transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#00F2FE] text-black font-extrabold shadow-[0_0_8px_#00F2FE]'
+                            ? 'bg-[#00F2FE] text-[#06080E] font-extrabold shadow-[0_0_10px_rgba(0,242,254,0.5)]'
                             : isMalicious
-                            ? 'text-red-400 hover:bg-red-900/40 font-bold'
+                            ? 'text-rose-400 hover:bg-rose-950/60 font-bold'
                             : 'text-slate-300 hover:bg-cyan-950/60 hover:text-[#00F2FE]'
                         }`}
                       >
@@ -216,9 +216,9 @@ export const HexAnalyzerView: React.FC = () => {
 
         {/* Selected Byte Inspection Footer Bar */}
         {selectedByte && (
-          <div className="bg-[#07090E] p-4 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs">
+          <div className="bg-[#070A12] p-4 border-t border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs">
             <div className="flex items-center gap-4">
-              <div className="px-2.5 py-1 rounded bg-[#00F2FE]/15 text-[#00F2FE] border border-[#00F2FE]/40 font-bold">
+              <div className="px-2.5 py-1 rounded-md bg-[#00F2FE]/10 text-[#00F2FE] border border-cyan-400/30 font-bold">
                 OFFSET: {selectedByte.offset} + 0x{selectedByte.idx.toString(16).toUpperCase()}
               </div>
               <div className="text-slate-300">
@@ -227,8 +227,8 @@ export const HexAnalyzerView: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-red-400 font-semibold">
-              <ShieldAlert className="w-4 h-4 text-red-500 animate-pulse" />
+            <div className="flex items-center gap-2 text-rose-400 font-semibold">
+              <ShieldAlert className="w-4 h-4 text-rose-500 animate-pulse" />
               <span>OPCODE INTERPRETATION: XOR EAX, EAX [ZERO REGISTER STAGING]</span>
             </div>
           </div>

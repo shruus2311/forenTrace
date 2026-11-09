@@ -31,7 +31,7 @@ export const App = () => {
 
   return (
     <ToastProvider>
-      <div className="flex h-screen w-screen overflow-hidden bg-[#07090E] text-slate-100 font-sans selection:bg-[#00F2FE] selection:text-black">
+      <div className="flex h-screen w-screen overflow-hidden bg-[#06080E] text-slate-100 font-sans selection:bg-[#00F2FE] selection:text-black">
         {/* Workstation Sidebar */}
         <Sidebar
           currentView={currentView}
@@ -43,9 +43,9 @@ export const App = () => {
         />
 
         {/* Main Content Area */}
-        <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden bg-[#07090E] relative">
+        <div className="flex flex-col flex-1 h-full min-w-0 overflow-hidden bg-[#06080E] relative">
           {/* Subtle Ambient Background Grid */}
-          <div className="absolute inset-0 bg-cyber-grid opacity-25 pointer-events-none z-0" />
+          <div className="absolute inset-0 bg-cyber-grid opacity-30 pointer-events-none z-0" />
 
           {/* Top Bar Navigation */}
           <TopBar
@@ -55,8 +55,8 @@ export const App = () => {
           />
 
           {/* Main Scrollable View Container */}
-          <main className="flex-1 overflow-y-auto p-4 md:p-8 relative z-10">
-            <div className="max-w-7xl mx-auto">
+          <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative z-10">
+            <div className="max-w-7xl mx-auto space-y-6">
               {currentView === 'dashboard' && (
                 <DashboardView
                   activeCaseId={activeCaseId}

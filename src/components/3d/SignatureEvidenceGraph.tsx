@@ -206,7 +206,7 @@ export const SignatureEvidenceGraph: React.FC<{
   };
 
   return (
-    <div className="relative w-full h-[360px] md:h-[420px] rounded-2xl bg-[#090C14] border border-white/10 overflow-hidden shadow-2xl">
+    <div className="relative w-full h-[360px] md:h-[420px] rounded-2xl bg-[#080C15] border border-white/[0.08] overflow-hidden shadow-2xl">
       {/* View Mode Toggle: 3D vs 2D Schematic */}
       <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
         <button
@@ -214,7 +214,7 @@ export const SignatureEvidenceGraph: React.FC<{
             setUse3D(!use3D);
             cyberAudio.playClick(600, 0.04);
           }}
-          className="px-2.5 py-1 rounded bg-[#111622]/90 border border-white/10 hover:border-white/25 text-[10px] font-mono text-slate-300 transition-colors cursor-pointer"
+          className="px-2.5 py-1 rounded-md bg-[#101726]/90 border border-white/10 hover:border-cyan-400/40 text-[10px] font-mono text-slate-300 hover:text-white transition-colors cursor-pointer"
         >
           MODE: {use3D ? '3D MATRIX' : '2D SCHEMATIC'}
         </button>
@@ -224,7 +224,7 @@ export const SignatureEvidenceGraph: React.FC<{
       <div className="absolute top-4 left-4 z-20 pointer-events-none select-none">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#00F2FE] animate-pulse" />
-          <span className="font-mono text-[10px] tracking-wider text-cyan-300 uppercase">
+          <span className="font-mono text-[10px] tracking-wider text-cyan-300 uppercase font-semibold">
             EVIDENCE PROVENANCE TOPOLOGY
           </span>
         </div>
@@ -255,8 +255,8 @@ export const SignatureEvidenceGraph: React.FC<{
                 onClick={() => handleSelect(n)}
                 className={`p-3 rounded-lg border font-mono text-xs cursor-pointer transition-colors ${
                   selectedNode?.id === n.id
-                    ? 'bg-[#00F2FE]/10 border-[#00F2FE] text-white'
-                    : 'bg-[#111622] border-white/10 text-slate-300 hover:border-white/20'
+                    ? 'bg-[#00F2FE]/10 border-cyan-400 text-white shadow-[0_0_12px_rgba(0,242,254,0.15)]'
+                    : 'bg-[#0C111C] border-white/[0.08] text-slate-300 hover:border-white/20'
                 }`}
               >
                 <div className="text-[10px] text-slate-400">{n.category}</div>
@@ -269,7 +269,7 @@ export const SignatureEvidenceGraph: React.FC<{
 
       {/* Bottom Selected Node Inspector Card */}
       {selectedNode && (
-        <div className="absolute bottom-4 inset-x-4 z-20 p-3 rounded-xl bg-[#0B0F17]/90 backdrop-blur-md border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-xs">
+        <div className="absolute bottom-4 inset-x-4 z-20 p-3 rounded-xl bg-[#090D17]/95 backdrop-blur-md border border-white/[0.1] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono text-xs shadow-2xl">
           <div className="flex items-center gap-3">
             <span
               className="w-2.5 h-2.5 rounded-full shrink-0"
