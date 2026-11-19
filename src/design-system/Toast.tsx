@@ -62,6 +62,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           return (
             <div
               key={toast.id}
+              role={toast.type === 'error' ? 'alert' : undefined}
               className={`pointer-events-auto relative overflow-hidden p-4 rounded-xl backdrop-blur-xl border ${config.border} shadow-xl flex items-start gap-3 transition-all duration-200 animate-in fade-in slide-in-from-bottom-2`}
             >
               <div className={`absolute left-0 top-0 bottom-0 w-1 ${config.accent}`} />

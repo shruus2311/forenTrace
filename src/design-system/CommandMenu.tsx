@@ -23,7 +23,7 @@ import {
   ShieldAlert,
   DownloadCloud,
 } from 'lucide-react';
-import { CASES, EVIDENCE_ITEMS } from '../data/mockForensicsData';
+import type { CaseAccess } from '../api/client';
 import { cyberAudio } from '../lib/audio';
 
 export interface CommandMenuProps {
@@ -31,15 +31,19 @@ export interface CommandMenuProps {
   onClose: () => void;
   onNavigate: (view: string) => void;
   onSelectCase: (caseId: string) => void;
-  onSelectEvidence?: (evidenceId: string) => void;
+  cases: CaseAccess[];
+  showDemo: boolean;
 }
+
+export const LIVE_WORKSPACES = ['cases', 'evidence', 'integrity', 'acquisition', 'custody', 'analysis', 'settings'];
 
 export const WORKSPACE_MODULES = [
   { id: 'dashboard', label: 'Command Center', icon: Terminal, category: 'Operations', badge: 'OVERVIEW' },
   { id: 'cases', label: 'Case Management', icon: Briefcase, category: 'Operations', badge: 'ACTIVE' },
   { id: 'workspace', label: 'Investigation Workspace', icon: FolderGit2, category: 'Operations', badge: 'TRIAGE' },
-  { id: 'evidence', label: 'Evidence Vault', icon: HardDrive, category: 'Evidence', badge: '18 ARTIFACTS' },
-  { id: 'acquisition', label: 'Evidence Acquisition', icon: DownloadCloud, category: 'Evidence', badge: 'WRITE-BLOCK' },
+  { id: 'evidence', label: 'Evidence Vault', icon: HardDrive, category: 'Evidence', badge: 'ARTIFACTS' },
+  { id: 'acquisition', label: 'Register Evidence', icon: DownloadCloud, category: 'Evidence', badge: 'UPLOAD' },
+  { id: 'analysis', label: 'Forensic Analysis', icon: FileSearch, category: 'Evidence', badge: 'JOBS' },
   { id: 'integrity', label: 'Evidence Integrity', icon: ShieldCheck, category: 'Evidence', badge: 'SHA-256' },
   { id: 'disk', label: 'Disk Forensics', icon: Layers, category: 'Deep Analysis', badge: 'NTFS/$MFT' },
   { id: 'memory', label: 'Memory Forensics', icon: Cpu, category: 'Deep Analysis', badge: 'VAD/RAM' },
@@ -60,7 +64,8 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
   onClose,
   onNavigate,
   onSelectCase,
-  onSelectEvidence,
+  cases,
+  showDemo,
 }) => {
   const [query, setQuery] = useState('');
 
@@ -82,23 +87,13 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
 
   const filteredModules = WORKSPACE_MODULES.filter(
     (m) =>
+      (showDemo || LIVE_WORKSPACES.includes(m.id)) && (
       m.label.toLowerCase().includes(query.toLowerCase()) ||
       m.category.toLowerCase().includes(query.toLowerCase()) ||
-      m.badge.toLowerCase().includes(query.toLowerCase())
+      m.badge.toLowerCase().includes(query.toLowerCase()))
   );
 
-  const filteredCases = CASES.filter(
-    (c) =>
-      c.title.toLowerCase().includes(query.toLowerCase()) ||
-      c.caseNumber.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const filteredEvidence = EVIDENCE_ITEMS.filter(
-    (e) =>
-      e.name.toLowerCase().includes(query.toLowerCase()) ||
-      e.id.toLowerCase().includes(query.toLowerCase()) ||
-      e.hashes.sha256.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredCases = cases.filter((c) => c.id.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 px-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
@@ -110,7 +105,7 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search forensic workspaces, artifacts, hashes, MITRE tactics..."
+            placeholder="Search workspaces and assigned cases"
             className="flex-1 bg-transparent border-none outline-none text-slate-800 dark:text-[#E7EAF0] placeholder:text-slate-400 dark:placeholder:text-slate-500 font-sans text-sm"
             autoFocus
           />
@@ -182,12 +177,11 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <span className="font-mono text-[11px] text-[#416F9E] dark:text-[#648DBB] font-bold shrink-0">
-                        {c.caseNumber}
+                        {c.id}
                       </span>
-                      <span className="truncate font-medium">{c.title}</span>
                     </div>
                     <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 shrink-0 ml-2">
-                      {c.threatLevel}
+                      {c.role}
                     </span>
                   </button>
                 ))}
@@ -195,41 +189,6 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
             </div>
           )}
 
-          {/* Forensic Evidence Items */}
-          {filteredEvidence.length > 0 && (
-            <div>
-              <div className="px-2 py-1 text-[10px] font-mono uppercase text-slate-400 dark:text-slate-500 font-semibold tracking-wider">
-                ARTIFACT MATCHES ({filteredEvidence.length})
-              </div>
-              <div className="space-y-1 mt-1">
-                {filteredEvidence.map((e) => (
-                  <button
-                    key={e.id}
-                    onClick={() => {
-                      cyberAudio.playClick(920, 0.04);
-                      onNavigate('evidence');
-                      onSelectEvidence?.(e.id);
-                      onClose();
-                    }}
-                    className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#242B36] text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer group text-left"
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <span className="font-mono text-[11px] text-[#416F9E] dark:text-[#648DBB] font-bold shrink-0">
-                        {e.id}
-                      </span>
-                      <span className="truncate">{e.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0 ml-2">
-                      <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{e.fileSize}</span>
-                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-[#142820] text-[#337D5C] dark:text-[#4D9B78] border border-[#337D5C]/30 dark:border-[#4D9B78]/40">
-                        {e.integrityStatus}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Footer info */}

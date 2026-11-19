@@ -19,6 +19,11 @@ class EvidenceArtifactBase(BaseModel):
 class EvidenceArtifactCreate(EvidenceArtifactBase):
     expected_sha256: str
 
+class EvidenceObject(BaseModel):
+    bucket: str
+    version: str
+
+
 class EvidenceArtifactRead(EvidenceArtifactBase):
     id: str
     file_size_bytes: int
@@ -31,6 +36,7 @@ class EvidenceArtifactRead(EvidenceArtifactBase):
     mitre_techniques: List[str] = []
     derived_artifact_count: int = 0
     anomaly_score: int = 0
+    storage: EvidenceObject | None = None
 
 class EvidenceVerifyRequest(BaseModel):
     artifact_id: str

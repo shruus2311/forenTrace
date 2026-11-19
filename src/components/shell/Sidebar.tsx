@@ -24,7 +24,8 @@ import {
   DownloadCloud,
 } from 'lucide-react';
 import { cyberAudio } from '../../lib/audio';
-import { CASES } from '../../data/mockForensicsData';
+import type { CaseAccess } from '../../api/client';
+import { LIVE_WORKSPACES } from '../../design-system/CommandMenu';
 import { BrandLogo } from '../brand/BrandLogo';
 
 export interface SidebarProps {
@@ -34,6 +35,9 @@ export interface SidebarProps {
   onToggleCollapse: () => void;
   activeCaseId: string;
   onSelectCase: (caseId: string) => void;
+  cases: CaseAccess[];
+  organizationId: string;
+  showDemo: boolean;
 }
 
 interface NavSection {
@@ -53,8 +57,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
   activeCaseId,
   onSelectCase,
+  cases,
+  organizationId,
+  showDemo,
 }) => {
-  const currentCase = CASES.find((c) => c.id === activeCaseId) || CASES[0];
 
   const sections: NavSection[] = [
     {
@@ -68,8 +74,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'EVIDENCE & VAULT',
       items: [
-        { id: 'evidence', label: 'Evidence Vault', icon: HardDrive, badge: '18' },
-        { id: 'acquisition', label: 'Evidence Acquisition', icon: DownloadCloud },
+        { id: 'evidence', label: 'Evidence Vault', icon: HardDrive },
+        { id: 'acquisition', label: 'Register Evidence', icon: DownloadCloud },
+        { id: 'analysis', label: 'Forensic Analysis', icon: FileSearch },
         { id: 'integrity', label: 'Integrity Verification', icon: ShieldCheck, badge: 'SHA-256' },
       ],
     },
@@ -149,30 +156,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="relative">
               <select
                 value={activeCaseId}
+                aria-label="Assigned case"
+                disabled={cases.length === 0}
                 onChange={(e) => {
                   onSelectCase(e.target.value);
                   cyberAudio.playScan(700);
                 }}
                 className="w-full p-2 pr-7 rounded-lg bg-white dark:bg-[#1D232C] border border-slate-300 dark:border-[#303743] text-slate-800 dark:text-[#E7EAF0] font-mono text-[11px] outline-none hover:border-[#416F9E] dark:hover:border-[#648DBB] focus:border-[#416F9E] dark:focus:border-[#648DBB] transition-colors cursor-pointer appearance-none shadow-sm"
               >
-                {CASES.map((c) => (
+                {cases.length === 0 && <option value="">No assigned case</option>}
+                {cases.map((c) => (
                   <option key={c.id} value={c.id} className="bg-white dark:bg-[#1D232C] text-slate-800 dark:text-[#E7EAF0]">
-                    {c.caseNumber} - {c.title.substring(0, 20)}...
+                    {c.id} · {c.role}
                   </option>
                 ))}
               </select>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
             <div className="mt-1.5 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-[#9AA4B2] px-0.5">
-              <span className="truncate max-w-[130px]">{currentCase.clientOrganization}</span>
-              <span className="text-[#B74D55] dark:text-[#C66B70] font-semibold">{currentCase.threatLevel}</span>
+              <span className="truncate max-w-[130px]">{organizationId}</span>
             </div>
           </div>
         )}
 
         {/* Scrollable Navigation Groups */}
         <div className="flex-1 overflow-y-auto p-2 space-y-4">
-          {sections.map((sec, secIdx) => (
+          {sections.map((section) => ({
+            ...section, items: section.items.filter((item) => showDemo || LIVE_WORKSPACES.includes(item.id)),
+          })).filter((section) => section.items.length > 0).map((sec, secIdx) => (
             <div key={secIdx}>
               {!collapsed && (
                 <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold">

@@ -8,6 +8,7 @@ DEFAULT_CHUNK_SIZE = 65536  # 64 KB chunks for memory-safe streaming
 
 class HashFingerprint(BaseModel):
     md5: str
+    sha1: str
     sha256: str
     sha512: str
     byte_count: int
@@ -28,11 +29,12 @@ def compute_stream_fingerprint(
     stream: BinaryIO, chunk_size: int = DEFAULT_CHUNK_SIZE
 ) -> HashFingerprint:
     """
-    Computes simultaneous SHA-256, SHA-512, and MD5 hashes over a binary byte stream
+    Computes simultaneous SHA-256, SHA-512, SHA-1, and MD5 hashes over a binary byte stream
     without ever loading the full file into memory. Safe for multi-gigabyte forensic images.
     """
     start_time = time.perf_counter()
     h_md5 = hashlib.md5()
+    h_sha1 = hashlib.sha1()
     h_sha256 = hashlib.sha256()
     h_sha512 = hashlib.sha512()
     total_bytes = 0
@@ -43,6 +45,7 @@ def compute_stream_fingerprint(
             break
         total_bytes += len(chunk)
         h_md5.update(chunk)
+        h_sha1.update(chunk)
         h_sha256.update(chunk)
         h_sha512.update(chunk)
 
@@ -51,6 +54,7 @@ def compute_stream_fingerprint(
 
     return HashFingerprint(
         md5=h_md5.hexdigest(),
+        sha1=h_sha1.hexdigest(),
         sha256=h_sha256.hexdigest(),
         sha512=h_sha512.hexdigest(),
         byte_count=total_bytes,
@@ -76,8 +80,10 @@ def verify_file_integrity(
     Strict cryptographic verification of stored evidence bytes against expected SHA-256.
     Returns explicit failure if bytes have drifted or been tampered with.
     """
-    p = Path(file_path)
-    fingerprint = compute_file_fingerprint(p)
+    return verify_fingerprint(compute_file_fingerprint(file_path), str(file_path), expected_sha256)
+
+
+def verify_fingerprint(fingerprint: HashFingerprint, artifact_path: str, expected_sha256: str) -> VerificationResult:
     expected_normalized = expected_sha256.strip().lower()
     computed_normalized = fingerprint.sha256.lower()
 
@@ -93,7 +99,7 @@ def verify_file_integrity(
 
     return VerificationResult(
         is_valid=is_valid,
-        artifact_path=str(p),
+        artifact_path=artifact_path,
         expected_sha256=expected_normalized,
         computed_sha256=computed_normalized,
         computed_sha512=fingerprint.sha512,

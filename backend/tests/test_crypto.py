@@ -1,4 +1,5 @@
 import io
+from hashlib import sha1
 import tempfile
 from pathlib import Path
 import pytest
@@ -25,6 +26,7 @@ def test_streaming_hasher_known_vector():
     assert len(fp.sha256) == 64
     assert len(fp.sha512) == 128
     assert len(fp.md5) == 32
+    assert fp.sha1 == sha1(test_data).hexdigest()
     assert fp.byte_count == len(test_data)
 
 def test_file_integrity_verification_success_and_tamper():

@@ -16,10 +16,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+playwright-report/
+test-results/
 .env
 .env.*
 venv/
 .venv/
+/backend/data/vault/.uploads/
+/backend/data/vault/registered/
+/backend/data/artifacts/
 env/
 ENV/
 

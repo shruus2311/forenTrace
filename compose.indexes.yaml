@@ -1,0 +1,38 @@
+services:
+  opensearch:
+    image: opensearchproject/opensearch:2.19.3
+    environment:
+      discovery.type: single-node
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      DISABLE_SECURITY_PLUGIN: "true"
+      OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - forentrace_search:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS 'http://127.0.0.1:9200/_cluster/health?wait_for_status=yellow&timeout=2s'"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+  neo4j:
+    image: neo4j:5.26-community
+    environment:
+      NEO4J_AUTH: neo4j/${FORENTRACE_NEO4J_PASSWORD:?Set FORENTRACE_NEO4J_PASSWORD}
+      FORENTRACE_NEO4J_PASSWORD: ${FORENTRACE_NEO4J_PASSWORD:?Set FORENTRACE_NEO4J_PASSWORD}
+      NEO4J_server_memory_heap_initial__size: "256m"
+      NEO4J_server_memory_heap_max__size: "512m"
+      NEO4J_server_memory_pagecache_size: "256m"
+    ports:
+      - "127.0.0.1:7687:7687"
+    volumes:
+      - forentrace_graph:/data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$$FORENTRACE_NEO4J_PASSWORD\" 'RETURN 1' >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  forentrace_search:
+  forentrace_graph:

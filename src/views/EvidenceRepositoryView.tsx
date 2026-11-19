@@ -1,40 +1,51 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   HardDrive,
   Search,
-  Filter,
   Copy,
   Check,
   ShieldCheck,
-  Clock,
-  Terminal,
-  Cpu,
-  FileCode,
-  ArrowRight,
-  X,
-  ExternalLink,
   RefreshCw,
-  Sparkles,
 } from 'lucide-react';
 import { Card } from '../design-system/Card';
 import { Button } from '../design-system/Button';
-import { IntegrityBadge, SeverityBadge } from '../design-system/Badge';
-import { EVIDENCE_ITEMS } from '../data/mockForensicsData';
-import { EvidenceArtifact, ArtifactType } from '../types/forensics';
+import { IntegrityBadge } from '../design-system/Badge';
 import { useToast } from '../design-system/Toast';
 import { cyberAudio } from '../lib/audio';
-import { forensicApi } from '../api/client';
+import { forensicApi, type LiveEvidenceArtifact } from '../api/client';
 
-export const EvidenceRepositoryView: React.FC = () => {
+type EvidenceRepositoryProps = { caseId: string; canWrite: boolean };
+
+export function EvidenceRepositoryView(props: EvidenceRepositoryProps) {
+  return <EvidenceRepositoryCase key={props.caseId} {...props} />;
+}
+
+function EvidenceRepositoryCase({ caseId, canWrite }: EvidenceRepositoryProps) {
   const { showToast } = useToast();
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('ALL');
-  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceArtifact | null>(
-    EVIDENCE_ITEMS[0]
-  );
+  const [items, setItems] = useState<LiveEvidenceArtifact[] | null>();
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [selectedId, setSelectedId] = useState<string>();
   const [copiedHashKey, setCopiedHashKey] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'HASHES' | 'METADATA' | 'DERIVED'>('HASHES');
   const [isVerifying, setIsVerifying] = useState(false);
+  const selectedEvidence = items?.find((item) => item.id === selectedId) ?? items?.[0];
+
+  useEffect(() => {
+    let active = true;
+    void forensicApi.listEvidence(caseId).then((result) => {
+      if (active) setItems(result);
+    });
+    return () => {
+      active = false;
+    };
+  }, [caseId, loadAttempt]);
+
+  const reloadEvidence = () => {
+    setItems(undefined);
+    setLoadAttempt((attempt) => attempt + 1);
+  };
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -60,83 +71,85 @@ export const EvidenceRepositoryView: React.FC = () => {
 
     try {
       const liveResult = await forensicApi.verifyEvidence(selectedEvidence.id);
-      setIsVerifying(false);
-      if (liveResult && liveResult.is_valid) {
+      if (liveResult?.artifact_id !== selectedEvidence.id || typeof liveResult.is_valid !== 'boolean') {
+        throw new Error('Verification result unavailable');
+      }
+
+      setItems((current) => current?.map((item) => item.id === selectedEvidence.id
+        ? { ...item, integrity_status: liveResult.is_valid ? 'VERIFIED' : 'FAILED_VERIFICATION' }
+        : item) ?? current);
+
+      if (liveResult.is_valid) {
         cyberAudio.playClick(1100, 0.07);
         showToast({
           type: 'success',
           title: 'Integrity Verified (Live Vault)',
           description: `SHA-256 match confirmed at ${liveResult.throughput_mb_s} MB/s throughput.`,
         });
-      } else if (liveResult && !liveResult.is_valid) {
+      } else {
         cyberAudio.playClick(300, 0.1);
         showToast({
           type: 'error',
           title: 'CRITICAL: Evidence Corruption Detected',
-          description: liveResult.discrepancy_details || 'Hash collision or byte drift detected!',
-        });
-      } else {
-        cyberAudio.playClick(1050, 0.05);
-        showToast({
-          type: 'success',
-          title: 'Integrity Verified (Master Attestation)',
-          description: `SHA-256: ${selectedEvidence.hashes.sha256} matches origin master key.`,
+          description: liveResult.discrepancy_details || 'The computed SHA-256 differs from the expected hash.',
         });
       }
     } catch {
-      setIsVerifying(false);
       showToast({
-        type: 'success',
-        title: 'Integrity Verified (Attested Key)',
-        description: `SHA-256: ${selectedEvidence.hashes.sha256} matches origin master key.`,
+        type: 'error',
+        title: 'Evidence Verification Unavailable',
+        description: 'The forensic API did not return a verification result. Try again when the API is available.',
       });
+      reloadEvidence();
+    } finally {
+      setIsVerifying(false);
     }
   };
 
-  const filteredItems = EVIDENCE_ITEMS.filter((item) => {
-    const matchesSearch =
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.id.toLowerCase().includes(search.toLowerCase()) ||
-      item.hashes.sha256.toLowerCase().includes(search.toLowerCase()) ||
-      item.sourceHost.toLowerCase().includes(search.toLowerCase());
+  const header = (
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-[#303743]">
+      <div>
+        <h1 className="font-display font-bold text-2xl text-slate-900 dark:text-[#E7EAF0] tracking-wide flex items-center gap-2.5">
+          <HardDrive className="w-5 h-5 text-[#416F9E] dark:text-[#648DBB]" />
+          <span>EVIDENCE VAULT</span>
+        </h1>
+        <p className="text-xs font-mono text-slate-500 dark:text-[#9AA4B2] mt-1">
+          Authenticated digital forensic images, volatile RAM captures, and network telemetry.
+        </p>
+      </div>
 
-    const matchesType = typeFilter === 'ALL' || item.type === typeFilter;
-    return matchesSearch && matchesType;
-  });
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="outline" size="sm" onClick={reloadEvidence} disabled={items === undefined || isVerifying}>
+          Refresh
+        </Button>
+      </div>
+    </div>
+  );
+
+  if (!items?.length) {
+    return (
+      <div className="space-y-6 pb-12">
+        {header}
+        <Card variant={items === null ? 'critical' : 'default'}>
+          {items === null ? (
+            <p role="alert">Evidence Vault unavailable. The forensic API did not return evidence records.</p>
+          ) : (
+            <p role="status">{items === undefined ? 'Loading evidence records…' : 'No evidence records found.'}</p>
+          )}
+        </Card>
+      </div>
+    );
+  }
+
+  const searchText = search.toLowerCase();
+  const filteredItems = items.filter((item) =>
+    (typeFilter === 'ALL' || item.type === typeFilter) &&
+    [item.name, item.id, item.hashes.sha256, item.source_host].some((value) => value.toLowerCase().includes(searchText))
+  );
 
   return (
     <div className="space-y-6 pb-12">
-      {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-[#303743]">
-        <div>
-          <h1 className="font-display font-bold text-2xl text-slate-900 dark:text-[#E7EAF0] tracking-wide flex items-center gap-2.5">
-            <HardDrive className="w-5 h-5 text-[#416F9E] dark:text-[#648DBB]" />
-            <span>EVIDENCE VAULT</span>
-          </h1>
-          <p className="text-xs font-mono text-slate-500 dark:text-[#9AA4B2] mt-1">
-            Authenticated digital forensic images, volatile RAM captures, and network telemetry.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              cyberAudio.playScan(620);
-              showToast({
-                type: 'info',
-                title: 'Exporting Custody Manifest',
-                description: 'Generated court-admissible JSON-LD evidence inventory.',
-              });
-            }}
-            icon={<FileCode className="w-3.5 h-3.5 text-[#416F9E] dark:text-[#648DBB]" />}
-          >
-            Export Manifest (.JSON)
-          </Button>
-        </div>
-      </div>
-
+      {header}
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-center gap-3">
         {/* Search Input */}
@@ -154,7 +167,7 @@ export const EvidenceRepositoryView: React.FC = () => {
         {/* Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
           {[
-            { id: 'ALL', label: 'ALL (6)' },
+            { id: 'ALL', label: `ALL (${items.length})` },
             { id: 'MEMORY_DUMP', label: 'RAM' },
             { id: 'PACKET_CAPTURE', label: 'PCAP' },
             { id: 'DISK_IMAGE', label: 'DISK' },
@@ -195,13 +208,16 @@ export const EvidenceRepositoryView: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-[#303743]/60 font-mono text-xs">
+                {filteredItems.length === 0 && (
+                  <tr><td colSpan={5} className="p-4">No evidence matches the current filters.</td></tr>
+                )}
                 {filteredItems.map((item) => {
                   const isSelected = selectedEvidence?.id === item.id;
                   return (
                     <tr
                       key={item.id}
                       onClick={() => {
-                        setSelectedEvidence(item);
+                        setSelectedId(item.id);
                         cyberAudio.playClick(880, 0.04);
                       }}
                       className={`hover:bg-slate-50 dark:hover:bg-[#242B36] transition-colors cursor-pointer ${
@@ -216,7 +232,7 @@ export const EvidenceRepositoryView: React.FC = () => {
                           </span>
                         </div>
                         <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[240px] mt-0.5">
-                          HOST: {item.sourceHost}
+                          HOST: {item.source_host}
                         </div>
                       </td>
 
@@ -226,17 +242,17 @@ export const EvidenceRepositoryView: React.FC = () => {
                         </span>
                       </td>
 
-                      <td className="py-3 px-4 text-slate-600 dark:text-slate-300">{item.fileSize}</td>
+                      <td className="py-3 px-4 text-slate-600 dark:text-slate-300">{item.file_size_human}</td>
 
                       <td className="py-3 px-4">
-                        <IntegrityBadge status={item.integrityStatus} size="sm" />
+                        <IntegrityBadge status={item.integrity_status} size="sm" />
                       </td>
 
                       <td className="py-3 px-4 text-right">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            setSelectedEvidence(item);
+                            setSelectedId(item.id);
                             cyberAudio.playScan(740);
                           }}
                           className="px-2.5 py-1 rounded bg-[#EBF2F9] dark:bg-[#1A2838] hover:bg-[#DCE7F3] dark:hover:bg-[#23354B] text-[#416F9E] dark:text-[#648DBB] border border-[#416F9E]/30 dark:border-[#648DBB]/40 text-[10px] font-bold tracking-wider transition-colors cursor-pointer uppercase shadow-sm"
@@ -263,7 +279,7 @@ export const EvidenceRepositoryView: React.FC = () => {
                     <span className="font-mono text-xs text-[#416F9E] dark:text-[#648DBB] font-bold">
                       {selectedEvidence.id}
                     </span>
-                    <IntegrityBadge status={selectedEvidence.integrityStatus} size="sm" />
+                    <IntegrityBadge status={selectedEvidence.integrity_status} size="sm" />
                   </div>
                   <h2 className="font-mono font-bold text-sm text-slate-900 dark:text-white break-all">
                     {selectedEvidence.name}
@@ -274,7 +290,7 @@ export const EvidenceRepositoryView: React.FC = () => {
                   variant="technical"
                   size="sm"
                   onClick={handleVerifyCurrent}
-                  disabled={isVerifying}
+                  disabled={isVerifying || !canWrite}
                   icon={<RefreshCw className={`w-3.5 h-3.5 ${isVerifying ? 'animate-spin' : ''}`} />}
                 >
                   {isVerifying ? 'Verifying...' : 'Re-Verify'}
@@ -367,14 +383,14 @@ export const EvidenceRepositoryView: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Ed25519 Hardware Seal */}
+                  {/* Ed25519 Signature */}
                   <div className="p-3 rounded-lg bg-emerald-50/50 dark:bg-[#142820]/40 border border-[#337D5C]/30 dark:border-[#4D9B78]/30 text-[11px]">
                     <div className="text-[#337D5C] dark:text-[#4D9B78] text-[10px] font-bold flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>ED25519 HARDWARE HSM SIGNATURE</span>
+                      <span>ED25519 SIGNATURE</span>
                     </div>
                     <div className="text-slate-700 dark:text-slate-300 break-all mt-1 leading-relaxed">
-                      {selectedEvidence.signatureEd25519}
+                      {selectedEvidence.signature_ed25519}
                     </div>
                   </div>
                 </div>
@@ -387,7 +403,7 @@ export const EvidenceRepositoryView: React.FC = () => {
                     <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-[#303743]">
                       <div className="text-[10px] text-slate-400 dark:text-slate-500">SOURCE HOST</div>
                       <div className="text-slate-800 dark:text-white font-medium mt-0.5 truncate">
-                        {selectedEvidence.sourceHost}
+                        {selectedEvidence.source_host}
                       </div>
                     </div>
                     <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-[#303743]">
@@ -399,13 +415,13 @@ export const EvidenceRepositoryView: React.FC = () => {
                     <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-[#303743]">
                       <div className="text-[10px] text-slate-400 dark:text-slate-500">FILE SIZE</div>
                       <div className="text-[#337D5C] dark:text-[#4D9B78] font-medium mt-0.5">
-                        {selectedEvidence.fileSize}
+                        {selectedEvidence.file_size_human}
                       </div>
                     </div>
                     <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-[#111318] border border-slate-200 dark:border-[#303743]">
                       <div className="text-[10px] text-slate-400 dark:text-slate-500">ANOMALY SCORE</div>
                       <div className="text-[#B74D55] dark:text-[#C66B70] font-bold mt-0.5">
-                        {selectedEvidence.anomalyScore}/100
+                        {selectedEvidence.anomaly_score}/100
                       </div>
                     </div>
                   </div>
@@ -427,7 +443,7 @@ export const EvidenceRepositoryView: React.FC = () => {
                       CORRELATED MITRE ATT&CK TACTICS:
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {selectedEvidence.mitreTechniques.map((tech) => (
+                      {selectedEvidence.mitre_techniques.map((tech) => (
                         <span
                           key={tech}
                           className="px-2.5 py-1 rounded bg-[#FDF0F1] dark:bg-[#2C181A] border border-[#B74D55]/30 dark:border-[#C66B70]/30 text-[#B74D55] dark:text-[#C66B70] text-xs font-bold"
@@ -442,12 +458,9 @@ export const EvidenceRepositoryView: React.FC = () => {
                     <div className="flex items-center justify-between text-slate-700 dark:text-slate-300 font-medium">
                       <span>DERIVED MEMORY ARTIFACTS</span>
                       <span className="text-[#416F9E] dark:text-[#648DBB] font-bold">
-                        {selectedEvidence.derivedArtifactCount} EXTRACTED
+                        {selectedEvidence.derived_artifact_count} EXTRACTED
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                      Includes carved unbacked PE binaries, injected DLLs, and decrypted SSL master keys.
-                    </p>
                   </div>
                 </div>
               )}
@@ -461,6 +474,6 @@ export const EvidenceRepositoryView: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default EvidenceRepositoryView;
